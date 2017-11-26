@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { Platform, View, Text, Image, TouchableOpacity } from 'react-native';
 
 const logo = require('../assets/img/logo.png');
 const menu = require('../assets/img/menu.png');
@@ -12,7 +12,7 @@ class MainScreen extends Component {
 			</TouchableOpacity>
 		),
 		headerTitle: (navigation.state.routeName&& navigation.state.routeName === 'Main' ?
-			<Image source={logo} style={{marginLeft: -75, left: '50%',width: 123, height: 40}}/> : '전체보기'
+			<Image source={logo} style={[{width: 123, height: 40}, Platform.OS === 'android' ? {marginLeft: -75, left: '50%'} : {}]}/> : '전체보기'
 		),
 		headerRight: (
 			<View style={{width: 32, height: 32, marginHorizontal: 8}}/>
