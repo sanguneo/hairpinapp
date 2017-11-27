@@ -1,4 +1,4 @@
-package com.reactnativeboilerplate;
+package com.sanguneo.hairpin;
 
 import android.app.Application;
 import android.util.Log;

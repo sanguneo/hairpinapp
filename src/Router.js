@@ -1,7 +1,7 @@
 import { StackNavigator, DrawerNavigator } from 'react-navigation';
 
 import Drawer from './containers/Drawer';
-import MainScreen from './containers/MainScreen';
+import MainScreen from './containers/MainTotal';
 
 const StackNavigation = StackNavigator({
 	Main: { screen: MainScreen },
