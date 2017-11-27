@@ -17,10 +17,17 @@ const StackNavigation = StackNavigator({
 });
 
 const BaseNavigation = DrawerNavigator({
-	Main: { screen: StackNavigation },
+	Main: {
+		screen: StackNavigation
+	},
 }, {
+	contentComponent: Drawer,
 	drawerWidth: 200,
-	contentComponent: Drawer
+	contentOptions: {
+		style: {
+			marginTop: 24
+		}
+	}
 });
 
 

@@ -21,6 +21,8 @@
   ],
   "rules": {
     "linebreak-style": 0,
+    "no-use-before-define": 0,
+	"react/prefer-stateless-function": 1,
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
   }
 }
