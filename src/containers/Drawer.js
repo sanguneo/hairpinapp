@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
-import profile from '../assets/img/icon/profile.png';
+import profile from '../assets/img/profile.png';
 import subscribe from '../assets/img/icon/subscribe.png';
 import tags from '../assets/img/icon/tags.png';
 import total from '../assets/img/icon/images.png';
@@ -13,7 +13,7 @@ class Drawer extends Component {
 	render() {
 		return (
 			<View style={styles.drawer}>
-				<TouchableOpacity onPress={()=>{console.log('profile')}}>
+				<TouchableOpacity onPress={() => this.props.navigation.navigate('Login', {name: 'Lucy'})}>
 					<Image style={styles.profile} source={profile} />
 				</TouchableOpacity>
 				<TouchableOpacity style={styles.drawerBtnItem}>

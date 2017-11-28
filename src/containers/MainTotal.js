@@ -6,6 +6,7 @@ const menu = require('../assets/img/icon/menu.png');
 
 class MainScreen extends Component {
 	static navigationOptions = ({ navigation }) => ({
+		headerTitleStyle :{alignSelf: 'center', color: '#fff', fontWeight: 'normal'},
 		headerLeft: (
 			<TouchableOpacity onPress={() => {navigation.navigate('DrawerOpen')}}>
 				<Image source={menu} style={{width: 32, height: 32, marginHorizontal: 8, tintColor: '#fff'}}/>

@@ -1,19 +1,24 @@
 import { StackNavigator, DrawerNavigator } from 'react-navigation';
+import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
 
 import Drawer from './containers/Drawer';
-import MainScreen from './containers/MainTotal';
+import MainTotal from './containers/MainTotal';
+import Login from './containers/Login';
+
 
 const StackNavigation = StackNavigator({
-	Main: { screen: MainScreen },
-	Test: { screen: MainScreen },
+	Main	:	{ screen: MainTotal		},
+	Login	:	{ screen: Login 		},
+	Test	:	{ screen: MainTotal 	},
 }, {
 	cardStyle: { backgroundColor: '#fff'},
-	transitionConfig : () => ({transitionSpec:{duration: 0}}),
+	transitionConfig: () => ({ screenInterpolator: CardStackStyleInterpolator.forHorizontal }),
 	headerMode: 'screen',
-	navigationOptions: {
-		headerTitleStyle: { color: '#fff', fontWeight: 'normal' },
+	navigationOptions: ({ navigation }) => ({
 		headerStyle: { backgroundColor: '#36384C'},
-	},
+		headerTitleStyle: { alignSelf: 'center', color: '#fff', fontWeight: 'normal' },
+		headerTintColor: '#fff',
+	}),
 });
 
 const BaseNavigation = DrawerNavigator({
@@ -28,6 +33,7 @@ const BaseNavigation = DrawerNavigator({
 			marginTop: 24
 		}
 	}
+
 });
 
 
