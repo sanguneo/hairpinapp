@@ -24,20 +24,10 @@ const StackNavigation = StackNavigator({
 	}),
 });
 
-const TabNavigation = TabNavigator({
-	Main: {
-		screen: StackNavigation
-	},
-}, {
-	tabBarComponent : FooterAdBar,
-	tabBarPosition: 'bottom',
-	animationEnabled: true
-});
+const TabNavigation = TabNavigator({Main:{screen:StackNavigation}},{tabBarComponent:FooterAdBar,tabBarPosition:"bottom"});
 
 const BaseNavigation = DrawerNavigator({
-	Main: {
-		screen: TabNavigation
-	},
+	Main: { screen: TabNavigation }
 }, {
 	contentComponent: Drawer,
 	drawerWidth: 200,

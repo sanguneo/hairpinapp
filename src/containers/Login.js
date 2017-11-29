@@ -34,7 +34,7 @@ class Login extends Component {
 	}
 
 	render() {
-		let loggedin = false;
+		let loggedin = this.props.user.signhash && this.props.user.signhash !== '';
 		return (
 			<View style={styles.wrapper}>
 				<ScrollView style={styles.container} keyboardShouldPersistTaps='handled'>
@@ -45,7 +45,7 @@ class Login extends Component {
 						<LabeledInput label="이메일" placeholder="이메일을 입력하세요"
 									  value={this.state.loginEmail}
 									  keyboardType="email-address"
-									  onChange={(e) => this.handleInputChange('loginId', e)} />
+									  onChange={(e) => this.handleInputChange('loginEmail', e)} />
 						<Hr lineColor="#878787" />
 						<LabeledInput label="패스워드" placeholder="패스워드를 입력하세요"
 									  value={this.state.loginPassword}
@@ -54,7 +54,7 @@ class Login extends Component {
 					</FormWrapper>
 					{!loggedin ?
 						[	<View style={styles.btns} key={'login'}>
-								<Button label="로그인" onPress={()=> {console.log(this.state)}} buttonColor="#3692d9"/>
+								<Button label="로그인" onPress={()=> {this.props.dispatch(userActions.loginAsync({email: this.state.loginEmail,password: this.state.loginPassword}))}} buttonColor="#3692d9"/>
 							</View>,
 							<View style={[styles.btns, {marginTop: 10}]} key={'join'}>
 								<Button label="회원가입" onPress={()=> {this.props.navigation.navigate('Join')}} buttonColor="#bd6592"/>
@@ -106,8 +106,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
 	return {
 		user: state.user,
-		app: state.app/*,
-		navigation: state.navigation*/
+		app: state.app
 	};
 }
 
