@@ -34,7 +34,7 @@ class Login extends Component {
 	}
 
 	render() {
-		let loggedin = this.props.user.signhash && this.props.user.signhash !== '';
+		let loggedin = this.props.user.signhash && this.props.user.signhash !== '' ? true : false;
 		return (
 			<View style={styles.wrapper}>
 				<ScrollView style={styles.container} keyboardShouldPersistTaps='handled'>
@@ -42,15 +42,28 @@ class Login extends Component {
 						<Image source={profile} style={styles.img} />
 					</View>
 					<FormWrapper>
-						<LabeledInput label="이메일" placeholder="이메일을 입력하세요"
-									  value={this.state.loginEmail}
-									  keyboardType="email-address"
-									  onChange={(e) => this.handleInputChange('loginEmail', e)} />
-						<Hr lineColor="#878787" />
-						<LabeledInput label="패스워드" placeholder="패스워드를 입력하세요"
-									  value={this.state.loginPassword}
-									  secureTextEntry={true}
-									  onChange={(e) => this.handleInputChange('loginPassword', e)} />
+						{loggedin ?
+						[
+							<LabeledInput key="name" label="닉네임" placeholder="닉네임을 입력하세요"
+										  value={this.props.user.name}
+									      readOnly={loggedin}/>,
+							<Hr key="hr1" lineColor="#878787" />,
+							<LabeledInput key="email" label="이메일" placeholder="이메일을 입력하세요"
+										  value={this.props.user.email}
+										  readOnly={loggedin}/>,
+						] : [
+							<LabeledInput key="email" label="이메일" placeholder="이메일을 입력하세요"
+										  value={this.state.loginEmail}
+										  keyboardType="email-address"
+										  readOnly={loggedin}
+										  onChange={(e) => this.handleInputChange('loginEmail', e)} />,
+							<Hr key="hr1" lineColor="#878787" />,
+							<LabeledInput key="pw" label="패스워드" placeholder="패스워드를 입력하세요"
+										  value={this.state.loginPassword}
+										  secureTextEntry={true}
+										  readOnly={loggedin}
+										  onChange={(e) => this.handleInputChange('loginPassword', e)} />
+						]}
 					</FormWrapper>
 					{!loggedin ?
 						[	<View style={styles.btns} key={'login'}>
@@ -61,7 +74,7 @@ class Login extends Component {
 							</View>
 						] :
 						[	<View style={styles.btns} key={'login'}>
-							<Button label="로그아웃" onPress={()=> {console.log(this.state)}} buttonColor="#d9663c"/>
+							<Button label="로그아웃" onPress={()=> {this.props.dispatch(userActions.logout())}} buttonColor="#d9663c"/>
 						</View>,
 							<View style={[styles.btns, {marginTop: 10}]} key={'join'}>
 								<Button label="정보수정" onPress={()=> {this.props.navigation.navigate('Modify')}} buttonColor="#bd6592"/>

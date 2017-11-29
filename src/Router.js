@@ -1,12 +1,15 @@
 import { StackNavigator, DrawerNavigator, TabNavigator} from 'react-navigation';
 import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
 
+// Components
 import Drawer from './containers/Drawer';
 import MainTotal from './containers/MainTotal';
 import Login from './containers/Login';
 import Join from './containers/Join';
 
+// Advertise (Must located under other components)
 import FooterAdBar from "./containers/FooterAdBar";
+
 
 const StackNavigation = StackNavigator({
 	Main	:	{ screen: MainTotal		},
@@ -24,10 +27,12 @@ const StackNavigation = StackNavigator({
 	}),
 });
 
-const TabNavigation = TabNavigator({Main:{screen:StackNavigation}},{tabBarComponent:FooterAdBar,tabBarPosition:"bottom"});
+// User defined footer added screen(navigation).
+const FooterAdded = TabNavigator({Main:{screen:StackNavigation}},{tabBarComponent:FooterAdBar,tabBarPosition:"bottom"});
 
+//
 const BaseNavigation = DrawerNavigator({
-	Main: { screen: TabNavigation }
+	Main: { screen: FooterAdded }
 }, {
 	contentComponent: Drawer,
 	drawerWidth: 200,

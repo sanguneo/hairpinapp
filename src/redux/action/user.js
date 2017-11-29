@@ -10,16 +10,14 @@ export function login(user){
 	return {type: types.LOGGEDIN, user};
 }
 export function logout() {
-	AsyncStorage.removeItem('user',(err) => {
-		console.log('logout error', err);
-	});
+	AsyncStorage.removeItem('user');
 	return {type: types.LOGGEDOUT};
 }
 
 export function loginAsync(userinfo) {
 	return async (dispatch) => {
 		axios.post(
-			`http://${hairpinserver}/user/login`,
+			`https://${hairpinserver}/user/login`,
 			userinfo,
 			{
 				headers: {

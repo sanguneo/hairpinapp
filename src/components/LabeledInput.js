@@ -7,13 +7,14 @@ class LabeledInput extends Component {
 		label: PropTypes.string.isRequired,
 		placeholder: PropTypes.string,
 		value: PropTypes.any,
-		onChange: PropTypes.func.isRequired,
+		onChange: PropTypes.func,
 		secureTextEntry: PropTypes.bool,
 		style: PropTypes.object,
 		labelStyle: PropTypes.object,
 		inputStyle: PropTypes.object,
 		placeholderTextColor: PropTypes.string,
-		keyboardType: PropTypes.string
+		keyboardType: PropTypes.string,
+		readOnly: PropTypes.bool
 
 	};
 	static defaultProps = {
@@ -25,7 +26,8 @@ class LabeledInput extends Component {
 		labelStyle: {height: 40},
 		inputStyle: {height: 40},
 		placeholderTextColor: '#bbb',
-		keyboardType: 'default'
+		keyboardType: 'default',
+		readOnly: false
 	};
 
 	constructor(props) {
@@ -51,7 +53,7 @@ class LabeledInput extends Component {
 				<TextInput style={[styles.input, this.props.inputStyle]}
 						   value={this.state.value}
 						   onChange={this.props.onChange}
-						   editable={true}
+						   editable={!this.props.readOnly}
 						   placeholder={this.state.placeholder}
 						   underlineColorAndroid={'transparent'}
 						   underlineColorIos={'transparent'}
