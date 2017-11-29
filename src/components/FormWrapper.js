@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
 
 	},
 	container: {
+		borderRadius: 5,
 		marginHorizontal: 20,
 		backgroundColor: '#f5f5f5',
 	},

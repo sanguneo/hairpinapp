@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, View, ScrollView, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, ScrollView, Image, StyleSheet } from 'react-native';
 
 import {connect} from 'react-redux';
 import * as userActions from '../redux/action/user';
@@ -12,9 +12,9 @@ import Hr from '../components/Hr';
 import profile from '../assets/img/profile.png';
 
 
-class Login extends Component {
+class Join extends Component {
 	static navigationOptions = ({ navigation }) => ({
-		headerTitle: '로그인',
+		headerTitle: '회원가입',
 		headerTitleStyle :{alignSelf: 'center', color: '#fff', fontWeight: 'normal'},
 		headerRight: (
 			<View style={{width: 32, height: 32, marginHorizontal: 8}}/>
@@ -24,8 +24,10 @@ class Login extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			loginNickname: null,
 			loginEmail: null,
 			loginPassword: null,
+			loginPasswordChk: null
 		}
 	}
 
@@ -34,7 +36,6 @@ class Login extends Component {
 	}
 
 	render() {
-		let loggedin = false;
 		return (
 			<View style={styles.wrapper}>
 				<ScrollView style={styles.container} keyboardShouldPersistTaps='handled'>
@@ -42,6 +43,9 @@ class Login extends Component {
 						<Image source={profile} style={styles.img} />
 					</View>
 					<FormWrapper>
+						<LabeledInput label="닉네임" placeholder="닉네임을 입력하세요"
+									  value={this.state.loginNickname}
+									  onChange={(e) => this.handleInputChange('loginNickname', e)} />
 						<LabeledInput label="이메일" placeholder="이메일을 입력하세요"
 									  value={this.state.loginEmail}
 									  keyboardType="email-address"
@@ -51,23 +55,15 @@ class Login extends Component {
 									  value={this.state.loginPassword}
 									  secureTextEntry={true}
 									  onChange={(e) => this.handleInputChange('loginPassword', e)} />
+						<Hr lineColor="#878787" />
+						<LabeledInput label="확인" placeholder="패스워드를 다시 입력하세요"
+									  value={this.state.loginPasswordChk}
+									  secureTextEntry={true}
+									  onChange={(e) => this.handleInputChange('loginPasswordChk', e)} />
 					</FormWrapper>
-					{!loggedin ?
-						[	<View style={styles.btns} key={'login'}>
-								<Button label="로그인" onPress={()=> {console.log(this.state)}} buttonColor="#3692d9"/>
-							</View>,
-							<View style={[styles.btns, {marginTop: 10}]} key={'join'}>
-								<Button label="회원가입" onPress={()=> {this.props.navigation.navigate('Join')}} buttonColor="#bd6592"/>
-							</View>
-						] :
-						[	<View style={styles.btns} key={'login'}>
-							<Button label="로그아웃" onPress={()=> {console.log(this.state)}} buttonColor="#d9663c"/>
-						</View>,
-							<View style={[styles.btns, {marginTop: 10}]} key={'join'}>
-								<Button label="정보수정" onPress={()=> {this.props.navigation.navigate('Modify')}} buttonColor="#bd6592"/>
-							</View>
-						]
-					}
+					<View style={styles.btns}>
+						<Button label="회원가입" onPress={()=> {console.log(this.state)}} buttonColor="#d9663c"/>
+					</View>
 				</ScrollView>
 			</View>
 		);
@@ -99,6 +95,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		marginTop: 20,
+		marginBottom: 20
 	}
 });
 
@@ -106,11 +103,11 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
 	return {
 		user: state.user,
-		app: state.app/*,
-		navigation: state.navigation*/
+		app: state.app,
+		navigation: state.navigation
 	};
 }
 
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps)(Join);
 
 

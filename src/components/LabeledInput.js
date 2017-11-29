@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Platform, KeyboardAvoidingView, Text, TextInput, StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, Text, TextInput, StyleSheet } from 'react-native';
 
 class LabeledInput extends Component {
 	static propTypes = {
@@ -12,7 +12,8 @@ class LabeledInput extends Component {
 		style: PropTypes.object,
 		labelStyle: PropTypes.object,
 		inputStyle: PropTypes.object,
-		placeholderTextColor: PropTypes.string
+		placeholderTextColor: PropTypes.string,
+		keyboardType: PropTypes.string
 
 	};
 	static defaultProps = {
@@ -21,9 +22,10 @@ class LabeledInput extends Component {
 		onChange: this.handleInputChange,
 		secureTextEntry: false,
 		style: {},
-		labelStyle: {height: 50},
-		inputStyle: {height: 50},
-		placeholderTextColor: '#bbb'
+		labelStyle: {height: 40},
+		inputStyle: {height: 40},
+		placeholderTextColor: '#bbb',
+		keyboardType: 'default'
 	};
 
 	constructor(props) {
@@ -54,6 +56,7 @@ class LabeledInput extends Component {
 						   underlineColorAndroid={'transparent'}
 						   underlineColorIos={'transparent'}
 						   placeholderTextColor={this.props.placeholderTextColor}
+						   keyboardType={this.props.keyboardType}
 						   secureTextEntry={this.props.secureTextEntry}
 				/>
 			</KeyboardAvoidingView>
@@ -68,7 +71,7 @@ const styles = StyleSheet.create({
 	},
 	label: {
 		flex: 0.3,
-		height: 50,
+		height: 40,
 		textAlign: 'center',
 		textAlignVertical: 'center',
 		color: '#000',
@@ -77,8 +80,8 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		flex: 0.7,
-		height: 50,
-		textAlign: 'center',
+		height: 40,
+		textAlign: 'left',
 		color: '#000',
 		fontSize: 15
 	}
