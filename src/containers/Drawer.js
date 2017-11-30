@@ -1,6 +1,9 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+const RNFS = require('../service/RNFS_wrapper');
+
+import {connect} from 'react-redux';
 
 import profile from '../assets/img/profile.png';
 import subscribe from '../assets/img/icon/subscribe.png';
@@ -11,10 +14,12 @@ import notice from '../assets/img/icon/speaker.png';
 
 class Drawer extends Component {
 	render() {
+		let pPath = RNFS.PlatformDependPath + '/_profiles_/' + this.props.user.signhash + '.scalb';
+		let profileImage = this.props.user.signhash ? {uri: 'file://' + pPath + '?key=' + this.props.user.refresh} : profile;
 		return (
 			<View style={styles.drawer}>
 				<TouchableOpacity onPress={() => this.props.navigation.navigate('Login', {name: 'Lucy'})}>
-					<Image style={styles.profile} source={profile} />
+					<Image style={styles.profile} source={profileImage} />
 				</TouchableOpacity>
 				<TouchableOpacity style={styles.drawerBtnItem}>
 					<Image style={styles.drawerBtnItemImage} source={total} />
@@ -75,7 +80,12 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 	}
 });
+function mapStateToProps(state) {
+	return {
+		user: state.user,
+		app: state.app
+	};
+}
 
-export default Drawer;
-
+export default connect(mapStateToProps)(Drawer);
 

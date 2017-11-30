@@ -1,3 +1,5 @@
+export const REFRESH =  'REFRESH';
+
 export const LOGGEDIN =  'LOGGEDIN';
 export const LOGGEDOUT =  'LOGGEDOUT';
 

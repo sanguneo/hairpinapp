@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import Store from './redux/Store';
 import BaseNavigation from './Router';
 
-const initialize = require('./service/initialize');
+const initialize = require('./service/Initialize');
 
 const App = () => {
 	initialize(Store);

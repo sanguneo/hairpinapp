@@ -3,6 +3,7 @@ import Immutable from 'seamless-immutable';
 import * as types from '../actionType/user';
 
 const initialState = Immutable({
+	refresh: '',
 	token: '',
 	_id: '',
 	email: '',
@@ -15,6 +16,10 @@ const initialState = Immutable({
 
 export default function user(state = initialState, action = {}) {
 	switch (action.type) {
+		case types.REFRESH :
+			return Object.assign({}, state, {
+				refresh: action.refresh
+			});
 		case types.LOGGEDIN :
 			return Object.assign({}, state, {
 				...action.user

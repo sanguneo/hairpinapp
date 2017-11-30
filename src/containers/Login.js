@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Platform, View, ScrollView, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, ScrollView, Image, StyleSheet } from 'react-native';
+const RNFS = require('../service/RNFS_wrapper');
 
 import {connect} from 'react-redux';
 import * as userActions from '../redux/action/user';
@@ -33,50 +34,71 @@ class Login extends Component {
 		this.setState({[label]: event.nativeEvent.text});
 	}
 
+
+	login() {
+		this.props.dispatch(userActions.loginAsync({
+			email: this.state.loginEmail,
+			password: this.state.loginPassword
+		}))
+	}
+
+	logout() {
+		this.setState({
+			loginEmail: null,
+			loginPassword: null,
+		},()=> {
+			this.props.dispatch(userActions.logout());
+		});
+	}
+
 	render() {
 		let loggedin = this.props.user.signhash && this.props.user.signhash !== '' ? true : false;
+		let pPath = RNFS.PlatformDependPath + '/_profiles_/' + this.props.user.signhash + '.scalb';
+		let profileImage = loggedin ? {uri: 'file://' + pPath + '?key=' + this.props.user.refresh} : profile;
 		return (
 			<View style={styles.wrapper}>
 				<ScrollView style={styles.container} keyboardShouldPersistTaps='handled'>
 					<View style={styles.imgView}>
-						<Image source={profile} style={styles.img} />
+						<Image source={profileImage} style={styles.img} />
 					</View>
 					<FormWrapper>
 						{loggedin ?
-						[
-							<LabeledInput key="name" label="닉네임" placeholder="닉네임을 입력하세요"
-										  value={this.props.user.name}
-									      readOnly={loggedin}/>,
-							<Hr key="hr1" lineColor="#878787" />,
-							<LabeledInput key="email" label="이메일" placeholder="이메일을 입력하세요"
-										  value={this.props.user.email}
-										  readOnly={loggedin}/>,
-						] : [
-							<LabeledInput key="email" label="이메일" placeholder="이메일을 입력하세요"
-										  value={this.state.loginEmail}
-										  keyboardType="email-address"
-										  readOnly={loggedin}
-										  onChange={(e) => this.handleInputChange('loginEmail', e)} />,
-							<Hr key="hr1" lineColor="#878787" />,
-							<LabeledInput key="pw" label="패스워드" placeholder="패스워드를 입력하세요"
-										  value={this.state.loginPassword}
-										  secureTextEntry={true}
-										  readOnly={loggedin}
-										  onChange={(e) => this.handleInputChange('loginPassword', e)} />
-						]}
+							[
+								<LabeledInput key="name" label="닉네임" placeholder="닉네임을 입력하세요"
+											  value={this.props.user.name}
+											  readOnly={loggedin}/>,
+								<Hr key="hr2" lineColor="#878787" />,
+								<LabeledInput key="email" label="이메일" placeholder="이메일을 입력하세요"
+											  value={this.props.user.email}
+											  readOnly={loggedin}/>,
+							] : [
+								<LabeledInput key="email_ol" label="이메일" placeholder="이메일을 입력하세요"
+											  value={this.state.loginEmail}
+											  keyboardType="email-address"
+											  readOnly={loggedin}
+											  onChange={(e) => this.handleInputChange('loginEmail', e)} />,
+								<Hr key="hr2" lineColor="#878787" />,
+								<LabeledInput key="pw" label="패스워드" placeholder="패스워드를 입력하세요"
+											  value={this.state.loginPassword}
+											  secureTextEntry={true}
+											  readOnly={loggedin}
+											  onChange={(e) => this.handleInputChange('loginPassword', e)} />
+							]
+						}
 					</FormWrapper>
 					{!loggedin ?
-						[	<View style={styles.btns} key={'login'}>
-								<Button label="로그인" onPress={()=> {this.props.dispatch(userActions.loginAsync({email: this.state.loginEmail,password: this.state.loginPassword}))}} buttonColor="#3692d9"/>
+						[
+							<View style={styles.btns} key={'login'}>
+								<Button label="로그인" onPress={()=> {this.login()}} buttonColor="#3692d9"/>
 							</View>,
 							<View style={[styles.btns, {marginTop: 10}]} key={'join'}>
 								<Button label="회원가입" onPress={()=> {this.props.navigation.navigate('Join')}} buttonColor="#bd6592"/>
 							</View>
-						] :
-						[	<View style={styles.btns} key={'login'}>
-							<Button label="로그아웃" onPress={()=> {this.props.dispatch(userActions.logout())}} buttonColor="#d9663c"/>
-						</View>,
-							<View style={[styles.btns, {marginTop: 10}]} key={'join'}>
+						] : [
+							<View style={styles.btns} key={'logout'}>
+								<Button label="로그아웃" onPress={()=> {this.logout()}} buttonColor="#d9663c"/>
+							</View>,
+							<View style={[styles.btns, {marginTop: 10}]} key={'modify'}>
 								<Button label="정보수정" onPress={()=> {this.props.navigation.navigate('Modify')}} buttonColor="#bd6592"/>
 							</View>
 						]

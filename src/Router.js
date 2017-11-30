@@ -6,6 +6,7 @@ import Drawer from './containers/Drawer';
 import MainTotal from './containers/MainTotal';
 import Login from './containers/Login';
 import Join from './containers/Join';
+import Modify from './containers/Modify';
 
 // Advertise (Must located under other components)
 import FooterAdBar from "./containers/FooterAdBar";
@@ -15,6 +16,7 @@ const StackNavigation = StackNavigator({
 	Main	:	{ screen: MainTotal		},
 	Login	:	{ screen: Login 		},
 	Join	:	{ screen: Join 			},
+	Modify	:	{ screen: Modify 		},
 	Test	:	{ screen: MainTotal 	},
 }, {
 	cardStyle: { backgroundColor: '#fff'},

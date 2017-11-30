@@ -38,6 +38,7 @@
 		C4EC771E689549128177C466 /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AF118AD28F041FE8F257D89 /* libRNFS.a */; };
 		6E84363CAAB446319751C555 /* libRNAdMobManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1222037E990F4E1AB137FB35 /* libRNAdMobManager.a */; };
 		A89438765DB642CBB2E3984A /* libSQLite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C38BFFE7964C8CA0472CA5 /* libSQLite.a */; };
+		AE6497B3F96741BA89831180 /* libimageCropPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 48A97102AD404ECD8E2D312C /* libimageCropPicker.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -263,6 +264,8 @@
 		1222037E990F4E1AB137FB35 /* libRNAdMobManager.a */ = {isa = PBXFileReference; name = "libRNAdMobManager.a"; path = "libRNAdMobManager.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		4CCA548A33B7439DAB5E9BE1 /* SQLite.xcodeproj */ = {isa = PBXFileReference; name = "SQLite.xcodeproj"; path = "../node_modules/react-native-sqlite-storage/src/ios/SQLite.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		34C38BFFE7964C8CA0472CA5 /* libSQLite.a */ = {isa = PBXFileReference; name = "libSQLite.a"; path = "libSQLite.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		AC343968459B4318B0E5ACCD /* imageCropPicker.xcodeproj */ = {isa = PBXFileReference; name = "imageCropPicker.xcodeproj"; path = "../node_modules/react-native-image-crop-picker/ios/imageCropPicker.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		48A97102AD404ECD8E2D312C /* libimageCropPicker.a */ = {isa = PBXFileReference; name = "libimageCropPicker.a"; path = "libimageCropPicker.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -292,6 +295,7 @@
 				C4EC771E689549128177C466 /* libRNFS.a in Frameworks */,
 				6E84363CAAB446319751C555 /* libRNAdMobManager.a in Frameworks */,
 				A89438765DB642CBB2E3984A /* libSQLite.a in Frameworks */,
+				AE6497B3F96741BA89831180 /* libimageCropPicker.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -461,6 +465,7 @@
 				8639DC8234B048D88C0D5074 /* RNFS.xcodeproj */,
 				13D81EB5B21B4A4398FA4BBD /* RNAdMobManager.xcodeproj */,
 				4CCA548A33B7439DAB5E9BE1 /* SQLite.xcodeproj */,
+				AC343968459B4318B0E5ACCD /* imageCropPicker.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -988,12 +993,14 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/hairpinApp.app/hairpinApp";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-fs/**",
 					"$(SRCROOT)\..\node_modules\react-native-admob\ios",
 					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
+					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 				);
 			};
 			name = Debug;
@@ -1014,12 +1021,14 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/hairpinApp.app/hairpinApp";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-fs/**",
 					"$(SRCROOT)\..\node_modules\react-native-admob\ios",
 					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
+					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 				);
 			};
 			name = Release;
@@ -1044,6 +1053,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-fs/**",
 					"$(SRCROOT)\..\node_modules\react-native-admob\ios",
 					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
+					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 				);
 			};
 			name = Debug;
@@ -1067,6 +1077,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-fs/**",
 					"$(SRCROOT)\..\node_modules\react-native-admob\ios",
 					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
+					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 				);
 			};
 			name = Release;
@@ -1096,12 +1107,14 @@
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-fs/**",
 					"$(SRCROOT)\..\node_modules\react-native-admob\ios",
 					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
+					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 				);
 			};
 			name = Debug;
@@ -1131,12 +1144,14 @@
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)\..\node_modules\react-native-fs/**",
 					"$(SRCROOT)\..\node_modules\react-native-admob\ios",
 					"$(SRCROOT)\..\node_modules\react-native-sqlite-storage\src\ios",
+					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 				);
 			};
 			name = Release;
@@ -1161,6 +1176,7 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
 			name = Debug;
@@ -1185,6 +1201,7 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
 			name = Release;

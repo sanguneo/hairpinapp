@@ -6,7 +6,7 @@ class LabeledInput extends Component {
 	static propTypes = {
 		label: PropTypes.string.isRequired,
 		placeholder: PropTypes.string,
-		value: PropTypes.any,
+		value: PropTypes.string,
 		onChange: PropTypes.func,
 		secureTextEntry: PropTypes.bool,
 		style: PropTypes.object,
@@ -46,12 +46,17 @@ class LabeledInput extends Component {
 		});
 	}
 
+	focus() {
+		this.textinput.focus();
+	}
+
 	render() {
 		return (
 			<KeyboardAvoidingView style={[styles.wrapper, this.props.style]}>
 				<Text style={[styles.label, this.props.labelStyle]}>{this.state.label}</Text>
 				<TextInput style={[styles.input, this.props.inputStyle]}
-						   value={this.state.value}
+						   ref={ref => this.textinput = ref}
+						   defaultValue={this.state.value}
 						   onChange={this.props.onChange}
 						   editable={!this.props.readOnly}
 						   placeholder={this.state.placeholder}
