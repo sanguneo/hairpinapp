@@ -10,7 +10,7 @@ export function refresh(refresh){
 	return {type: types.REFRESH, refresh};
 }
 
-export function login(user){
+export function loginDone(user){
 	AsyncStorage.setItem('user', JSON.stringify(user));
 	return {type: types.LOGGEDIN, user};
 }
@@ -19,7 +19,7 @@ export function logout() {
 	return {type: types.LOGGEDOUT};
 }
 
-export function loginAsync(userinfo, callback=(()=>{})) {
+export function login(userinfo, callback=(()=>{})) {
 	return async (dispatch) => {
 		axios.post(
 			`https://${hairpinserver}/user/login`,
@@ -34,7 +34,7 @@ export function loginAsync(userinfo, callback=(()=>{})) {
 			if (response.data.message === 'success') {
 				let pPath = RNFS.PlatformDependPath + '/_profiles_/' + response.data.signhash + '.scalb';
 				const loginOK = () => {
-					dispatch(login({
+					dispatch(loginDone({
 						token: response.data.token,
 						_id: response.data._id,
 						email: response.data.email,
@@ -176,7 +176,7 @@ export function modifyAsync(userinfo, callback) {
 					RNFS.unlink(
 						userinfo.modifyProfile.uri.replace('file://', '')
 					).catch(e => {});
-					dispatch(refresh(Math.random() * 10000));
+					dispatch(loginDone({ name: response.data.nickname, refresh: Math.random() * 10000}));
 					Alert.alert('','회원정보 수정이 완료되었습니다.',
 						[{text: '확인', onPress: () => {callback()}}]);
 				}).catch(e => console.error('error', e));

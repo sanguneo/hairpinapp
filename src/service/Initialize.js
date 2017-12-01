@@ -13,6 +13,9 @@ module.exports = (Store) => {
 			if (resarr.indexOf(RNFS.PlatformDependPath + '/_original_') < 0) {
 				RNFS.mkdir(RNFS.PlatformDependPath + '/_original_');
 			}
+			if (resarr.indexOf(RNFS.PlatformDependPath + '/_thumb_') < 0) {
+				RNFS.mkdir(RNFS.PlatformDependPath + '/_thumb_');
+			}
 			if (resarr.indexOf(RNFS.PlatformDependPath + '/_profiles_') < 0) {
 				RNFS.mkdir(RNFS.PlatformDependPath + '/_profiles_');
 			}
@@ -22,5 +25,5 @@ module.exports = (Store) => {
 		});
 
 	// Get user status from AsyncStorage then fetch to user props
-	AsyncStorage.getItem('user').then((user) => Store.dispatch(userActions.login(JSON.parse(user))));
+	AsyncStorage.getItem('user').then((user) => Store.dispatch(userActions.loginDone(JSON.parse(user))));
 };

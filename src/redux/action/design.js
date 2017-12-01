@@ -1,6 +1,8 @@
 import {Alert} from 'react-native';
 
 import axios from 'axios';
+import ImageResizer from 'react-native-image-resizer';
+
 const RNFS = require('../../service/RNFS_wrapper');
 
 import * as types from '../actionType/design';
@@ -11,51 +13,56 @@ export function refresh(refresh){
 }
 
 export function saveDesign(designinfo, callback) {
-	return async (dispatch) => {
+	return async (dispatch, getState) => {
+		let {signhash} = getState().user;
+		const originalPath = `${RNFS.PlatformDependPath}/_original_/${signhash}_${designinfo.photohash}`;
 
+		const resizeBatch = (sideCase, callback) => {
+			let side = sideCase.charAt(0).toUpperCase() + sideCase.slice(1)
+			ImageResizer.createResizedImage(designinfo[`design${side}Image`].uri.replace('file://', ''), 400, 800, 'JPEG', 100, 0
+			).then(({uri}) => {
+				let renamed = `${originalPath}_CROP_${side.toUpperCase()}.scalb`;
+				RNFS.moveFile( uri.replace('file://', ''), renamed).then(() => {
+					RNFS.unlink(designinfo[`design${side}Image`].uri.replace('file://', '')).catch(()=>{});
+				});
+			}).catch((err) => console.log(err));
+			ImageResizer.createResizedImage(designinfo[`design${side}ImageSrc`].uri.replace('file://', ''), 800, 800, 'JPEG', 100, 0
+			).then(({uri}) => {
+				let renamed = `${originalPath}_SRC_${side.toUpperCase()}.scalb`;
+				RNFS.moveFile( uri.replace('file://', ''), renamed).then(() => {});
+			}).catch((err) => console.log(err));
+			callback();
+		}
+
+		const makeThumb = (callback)=> {
+			RNFS.moveFile(designinfo.designMergedImage.replace('file://', ''), `${originalPath}.scalb`).then(() => {
+				ImageResizer.createResizedImage(`${originalPath}.scalb`, 100, 100, 'JPEG', 100, 0).then(({uri}) => {
+					let renamed = `${RNFS.PlatformDependPath}/_thumb_/${signhash}_${designinfo.photohash}.scalb`;
+					RNFS.moveFile(uri.replace('file://', ''), renamed).then(() => callback());
+				}).catch((err) => console.log(err));
+			});
+		}
+
+		// done
+		resizeBatch('left',()=> {
+		resizeBatch('right', ()=> {
+		makeThumb(()=> {
+			RNFS.readDir(RNFS.PlatformDependPath + '/_original_')
+				.then(result => {
+					let resarr = [];
+					result.forEach(e => resarr.push(e.path));
+					console.log(resarr);
+				})
+				.catch(err => {
+					console.error(err.message, err.code);
+				});
+		});});});
+		//done
 	}
 }
 
-export function designDesign(userinfo, callback) {
+export function uploadDesign(designinfo, callback) {
 	return async (dispatch) => {
-		let formdata = new FormData();
-		formdata.append('profile', {
-			uri: userinfo.modifyProfile.uri,
-			type: 'image/jpeg',
-			name: userinfo.modifyEmail + '.scalb'
-		});
-		formdata.append('nickname', userinfo.modifyNickname);
-		formdata.append('email', userinfo.modifyEmail);
-		formdata.append('password', userinfo.modifyPassword);
-		axios.post(
-			`https://${hairpinserver}/user/modify`,
-			formdata,
-			{
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'multipart/form-data'
-				}
-			}
-		).then((response) => {
-			if (response.data.message === 'success') {
-				RNFS.copyFile(
-					userinfo.modifyProfile.uri.replace('file://', ''),
-					RNFS.PlatformDependPath + '/_profiles_/' + response.data.signhash + '.scalb'
-				).then(() => {
-					RNFS.unlink(
-						userinfo.modifyProfile.uri.replace('file://', '')
-					).catch(e => {});
-					dispatch(refresh(Math.random() * 10000));
-					Alert.alert('','회원정보 수정이 완료되었습니다.',
-						[{text: '확인', onPress: () => {callback()}}]);
-				}).catch(e => console.error('error', e));
-			} else if (response.data.message == 'emailexist') {
-				Alert.alert('사용중인 이메일 입니다.');
-			} else {
-				Alert.alert('입력값을 확인해주세요!');
-			}
-		}).catch(e => {
-			console.log('error', e);
-		});
-	};
+		console.log(designinfo);
+	}
 }

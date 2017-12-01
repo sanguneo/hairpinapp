@@ -36,7 +36,7 @@ class Login extends Component {
 
 
 	login() {
-		this.props.dispatch(userActions.loginAsync({
+		this.props.dispatch(userActions.login({
 			email: this.state.loginEmail,
 			password: this.state.loginPassword
 		}, () => {

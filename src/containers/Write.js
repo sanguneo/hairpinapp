@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { View, ScrollView, Text, Image, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
+import { captureRef } from "react-native-view-shot";
+import Crypt from '../utils/Crypt';
 
 import {connect} from 'react-redux';
-import * as userActions from '../redux/action/user';
+import * as designActions from '../redux/action/design';
 
 
 import FormWrapper from '../components/FormWrapper';
@@ -33,9 +35,13 @@ class Write extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			photohash: null,
+			regdate: null,
 			designLeftImage: pickphoto,
+			designLeftImageSrc: null,
 			designRightImage: pickphoto,
-			designTitle: '',
+			designRightImageSrc: null,
+			designTitle: null,
 			designTag: [],
 			designRecipe: '',
 			designComment: '',
@@ -51,6 +57,13 @@ class Write extends Component {
 		this.setState({[label]: event.nativeEvent.text});
 	}
 
+	getPhotohash() {
+		let regdate = Date.now();
+		let photohash = new Crypt().getAntCode(regdate);
+		this.setState({regdate, photohash});
+		return photohash;
+	}
+
 	setDesignImage(side) {
 		if(!side || side === '' || !['left', 'right'].includes(side)) return;
 		const sideCase = side.charAt(0).toUpperCase() + side.slice(1);
@@ -58,51 +71,48 @@ class Write extends Component {
 			width: 200,
 			height: 400,
 			cropping: true
-		}).then(img => {
-			this.setState({[`design${sideCase}Image`]: {uri: img.path}});
-		}).catch(e => (e.code !== 'E_PICKER_CANCELLED') && console.log(e));
+		}).then(img => this.setState({
+			[`design${sideCase}Image`]: {uri: img.path},
+			[`design${sideCase}ImageSrc`]: {uri: img.sourceURL}
+		})).catch(e => (e.code !== 'E_PICKER_CANCELLED') && console.log(e));
 	}
 
-
 	formCheck() {
-		if (!this.state.joinProfile.uri) {
-			Alert.alert('확인', '이미지를 선택해주세요.');
+		if (!this.state.designLeftImage.uri) {
+			Alert.alert('왼쪽 이미지를 선택해주세요.');
 			return false;
-		} else if (!this.state.joinNickname && this.state.joinNickname.length <= 0) {
-			Alert.alert('확인', '닉네임을 입력해주세요.');
-			this.joinNickname.focus();
-			return false;
-		} else if (!this.state.joinEmail && this.state.joinNickname.length <= 0) {
-			Alert.alert('확인', '이메일을 입력해주세요.');
-			this.joinEmail.focus();
-			return false;
-		} else if (!emailcheck(this.state.joinEmail)) {
-			Alert.alert('확인', '이메일을 형식에 맞게 입력해주세요.');
-			this.joinEmail.focus();
-			return false;
-		} else if (this.state.joinPassword.length < 8) {
-			Alert.alert('확인', '패스워드는 8자 이상이어야합니다.');
-			this.joinPassword.focus();
-			return false;
-		} else if (this.state.joinPassword !== this.state.joinPasswordChk) {
-			Alert.alert('확인', '패스워드 확인문자가 일치하지않습니다.');
-			this.joinPasswordChk.focus();
+		} else if (!this.state.designRightImage.uri) {
+			Alert.alert('오른쪽 이미지를 선택해주세요.');
 			return false;
 		}
 		return true;
 	}
+
+	combineImage(callback) {
+		captureRef(this.imgView, {
+			format: "jpg",
+			quality: 1
+		}).then(
+			uri => callback(uri),
+			error => console.error("image mergeFailed", error)
+		);
+	}
+
 	submit() {
 		if (!this.formCheck()) return;
-		this.props.dispatch(userActions.joinAsync(this.state, () => {
-			this.props.navigation.goBack(null);
-		}));
+		this.getPhotohash();
+		this.combineImage((designMergedImage) => {
+			this.props.dispatch(designActions.saveDesign({ designMergedImage,...this.state}, () => {
+				this.props.navigation.goBack(null);
+			}));
+		});
 	}
 
 	render() {
 		return (
 			<View style={styles.wrapper}>
 				<ScrollView style={styles.container} ref={ref=> this.ScrollView = ref} onScroll={event => this._whereLine(event)}  keyboardShouldPersistTaps='handled'>
-					<View style={styles.imgView}>
+					<View style={styles.imgView} ref={ref=> this.imgView = ref} collapsable={false}>
 						<TouchableOpacity onPress={()=> {this.setDesignImage('left')}}>
 							<Image source={this.state.designLeftImage} style={styles.img} />
 						</TouchableOpacity>
@@ -113,12 +123,12 @@ class Write extends Component {
 					<Text style={styles.formLabel}>기본정보</Text>
 					<FormWrapper style={{flex: 1, marginHorizontal: 10}}>
 						<LabeledInput label="제목" placeholder="제목을 입력하세요"
-									  value={this.state.joinNickname} ref={ref => this.joinNickname = ref}
-									  onChange={(e) => this.handleInputChange('joinNickname', e)} />
+									  value={this.state.designTitle}
+									  onChange={(e) => this.handleInputChange('designTitle', e)} />
 						<Hr lineColor="#878787" />
 						<LabeledTagInput label="테그" placeholder="테그를 입력하세요"
 										 onChange={(designTag)=>{this.setState({designTag})}}
-										 value={this.state.designTag} ref={ref => this.designTag = ref} />
+										 value={this.state.designTag} />
 					</FormWrapper>
 					<Text style={styles.formLabel}>레시피</Text>
 					<FormWrapper style={{flex: 1, marginHorizontal: 10}}>
