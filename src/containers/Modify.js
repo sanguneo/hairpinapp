@@ -50,7 +50,6 @@ class Modify extends Component {
 			height: 400,
 			cropping: true
 		}).then(img => {
-			console.log(img.path);
 			this.setState({modifyProfile: {uri: img.path}});
 		}).catch(e => (e.code !== 'E_PICKER_CANCELLED') && console.log(e));
 	}

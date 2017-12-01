@@ -4,7 +4,7 @@ import { Platform, View, Text, TextInput, StyleSheet } from 'react-native';
 
 class FormWrapper extends Component {
 	static propTypes = {
-		children: PropTypes.arrayOf(PropTypes.element),
+		children: PropTypes.any.isRequired,
 		style: PropTypes.object,
 	};
 	static defaultProps = {

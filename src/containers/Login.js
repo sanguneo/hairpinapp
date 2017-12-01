@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Image, StyleSheet } from 'react-native';
+import { View, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
 const RNFS = require('../service/RNFS_wrapper');
 
 import {connect} from 'react-redux';
@@ -39,6 +39,8 @@ class Login extends Component {
 		this.props.dispatch(userActions.loginAsync({
 			email: this.state.loginEmail,
 			password: this.state.loginPassword
+		}, () => {
+			setTimeout(()=> this.props.navigation.goBack(null), 500);
 		}))
 	}
 

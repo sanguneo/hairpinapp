@@ -3,10 +3,13 @@ import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/Car
 
 // Components
 import Drawer from './containers/Drawer';
-import MainTotal from './containers/MainTotal';
 import Login from './containers/Login';
 import Join from './containers/Join';
 import Modify from './containers/Modify';
+
+import MainTotal from './containers/MainTotal';
+import Write from './containers/Write';
+
 
 // Advertise (Must located under other components)
 import FooterAdBar from "./containers/FooterAdBar";
@@ -14,10 +17,12 @@ import FooterAdBar from "./containers/FooterAdBar";
 
 const StackNavigation = StackNavigator({
 	Main	:	{ screen: MainTotal		},
+	Total	:	{ screen: MainTotal 	},
+	Write	:	{ screen: Write 		},
+
 	Login	:	{ screen: Login 		},
 	Join	:	{ screen: Join 			},
 	Modify	:	{ screen: Modify 		},
-	Test	:	{ screen: MainTotal 	},
 }, {
 	cardStyle: { backgroundColor: '#fff'},
 	transitionConfig: () => ({ screenInterpolator: CardStackStyleInterpolator.forHorizontal }),

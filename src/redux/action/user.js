@@ -19,7 +19,7 @@ export function logout() {
 	return {type: types.LOGGEDOUT};
 }
 
-export function loginAsync(userinfo) {
+export function loginAsync(userinfo, callback=(()=>{})) {
 	return async (dispatch) => {
 		axios.post(
 			`https://${hairpinserver}/user/login`,
@@ -44,6 +44,7 @@ export function loginAsync(userinfo) {
 						followersize: response.data.followersize,
 						followingsize: response.data.followingsize
 					}));
+					callback();
 				}
 
 				RNFS.exists(pPath).then((res) => {

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { KeyboardAvoidingView, Text, TextInput, StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, View, Text, TextInput, StyleSheet } from 'react-native';
+import TagInput from './TagInput'
 
-class LabeledInput extends Component {
+class LabeledTagInput extends Component {
 	static propTypes = {
 		label: PropTypes.string.isRequired,
 		placeholder: PropTypes.string,
@@ -33,11 +34,12 @@ class LabeledInput extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			value: props.value,
+			tags: props.value,
 			label: props.label,
 			placeholder: props.placeholder,
 		}
 		this.handleInputChange = this.handleInputChange.bind(this);
+		this.onChangeTags = this.onChangeTags.bind(this);
 	}
 
 	handleInputChange(event) {
@@ -46,22 +48,35 @@ class LabeledInput extends Component {
 		});
 	}
 
+	onChangeTags(tags) {
+		this.setState({tags});
+		this.props.onChange(tags);
+	};
+
+	focus() {
+		this.textinput.focus();
+	}
+
 	render() {
 		return (
 			<KeyboardAvoidingView style={[styles.wrapper, this.props.style]}>
 				<Text style={[styles.label, this.props.labelStyle]}>{this.state.label}</Text>
-				<TextInput style={[styles.input, this.props.inputStyle]}
-						   ref={ref => this.textinput = ref}
-						   value={this.state.value}
-						   onChange={this.props.onChange}
-						   editable={!this.props.readOnly}
-						   placeholder={this.state.placeholder}
-						   underlineColorAndroid={'transparent'}
-						   underlineColorIos={'transparent'}
-						   placeholderTextColor={this.props.placeholderTextColor}
-						   keyboardType={this.props.keyboardType}
-						   secureTextEntry={this.props.secureTextEntry}
-				/>
+				<View style={styles.input}>
+					<TagInput value={this.state.tags}
+						onChange={this.onChangeTags}
+						// tagColor={commonStyle.placeholderTextColor}
+						// placeholderTextColor={commonStyle.placeholderTextColor}
+						tagTextColor="white"
+						inputProps={{
+							keyboardType: 'default',
+							placeholder: '태그',
+							autoFocus: false
+						}}
+						parseOnBlur={true}
+						numberOfLines={99}
+						ref={'tag'}
+					/>
+				</View>
 			</KeyboardAvoidingView>
 		);
 	}
@@ -83,14 +98,11 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		flex: 0.7,
-		height: 40,
-		textAlign: 'left',
-		color: '#000',
-		fontSize: 15
+		marginRight: 5
 	}
 });
 
 
-export default LabeledInput
+export default LabeledTagInput
 
 

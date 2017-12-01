@@ -5,7 +5,6 @@ import {AsyncStorage} from 'react-native';
 import * as userActions from '../redux/action/user';
 
 module.exports = (Store) => {
-
 	// Make Initial Directory
 	RNFS.readDir(RNFS.PlatformDependPath)
 		.then(result => {

@@ -97,6 +97,7 @@ class Join extends Component {
 						<LabeledInput label="닉네임" placeholder="닉네임을 입력하세요"
 									  value={this.state.joinNickname} ref={ref => this.joinNickname = ref}
 									  onChange={(e) => this.handleInputChange('joinNickname', e)} />
+						<Hr lineColor="#878787" />
 						<LabeledInput label="이메일" placeholder="이메일을 입력하세요"
 									  value={this.state.joinEmail} ref={ref => this.joinEmail = ref}
 									  keyboardType="email-address"

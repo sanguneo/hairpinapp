@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Platform, View, Text, Image, TouchableOpacity } from 'react-native';
+import SQLite from '../service/SQLite';
+
+import {connect} from 'react-redux';
 
 const logo = require('../assets/img/logo.png');
 const menu = require('../assets/img/icon/menu.png');
@@ -7,7 +10,7 @@ const menu = require('../assets/img/icon/menu.png');
 class MainScreen extends Component {
 	static navigationOptions = ({ navigation }) => ({
 		headerTitleStyle :{alignSelf: 'center', color: '#fff', fontWeight: 'normal'},
-		headerLeft: (
+		headerLeft: (navigation.state.routeName&& navigation.state.routeName === 'Main' &&
 			<TouchableOpacity onPress={() => {navigation.navigate('DrawerOpen')}}>
 				<Image source={menu} style={{width: 32, height: 32, marginHorizontal: 8, tintColor: '#fff'}}/>
 			</TouchableOpacity>
@@ -18,7 +21,16 @@ class MainScreen extends Component {
 		headerRight: (
 			<View style={{width: 32, height: 32, marginHorizontal: 8}}/>
 		),
-	})
+	});
+
+	updateThumbs() {
+		// SQLite.getDesigns(console.log, this.props.user.signhash, 50);
+	}
+
+	componentWillMount() {
+		this.updateThumbs();
+	}
+
 	render() {
 		return (
 			<View>
@@ -31,6 +43,14 @@ class MainScreen extends Component {
 	}
 }
 
-export default MainScreen;
 
+
+function mapStateToProps(state) {
+	return {
+		user: state.user,
+		app: state.app
+	};
+}
+
+export default connect(mapStateToProps)(MainScreen);
 

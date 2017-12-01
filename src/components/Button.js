@@ -15,7 +15,10 @@ class Button extends Component {
 	};
 	static defaultProps = {
 		touchableType: 0,
-		style: {},
+		style: {
+			width: 300,
+			height: 40
+		},
 		source: null
 	};
 
@@ -37,21 +40,22 @@ class Button extends Component {
 
 	render() {
 		return (
-			<TouchableWeUse onPress={() => {this.props.onPress()}}>
-				<View style={[styles.container, this.props.style, {backgroundColor: this.props.buttonColor}]}>
-					{this.props.source !== null ? <Image style={[styles.image, this.props.imgStyle]} source={this.props.source}/> : null}
-					{this.props.label !== null ? <Text style={styles.label}>{this.props.label}</Text> : null}
-				</View>
+		<View style={[styles.container, this.props.style, {backgroundColor: this.props.buttonColor}]}>
+			<TouchableWeUse style={styles.touchable} onPress={() => {this.props.onPress()}}>
+				{this.props.source !== null ? <Image style={[styles.image, this.props.imgStyle]} source={this.props.source}/> : null}
+				{this.props.label !== null ? <Text style={styles.label}>{this.props.label}</Text> : null}
 			</TouchableWeUse>
+		</View>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
+	touchable: {
+		flex: 1
+	},
 	container: {
 		flexDirection: 'row',
-		width: 300,
-		height: 40,
 		alignItems: 'center',
 		justifyContent: 'center',
 		borderRadius: 5,
