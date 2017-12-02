@@ -4,7 +4,7 @@ const RNFS = require('./RNFS_wrapper');
 import {AsyncStorage} from 'react-native';
 import * as userActions from '../redux/action/user';
 
-module.exports = (Store) => {
+module.exports = (Store, callback) => {
 	// Make Initial Directory
 	RNFS.readDir(RNFS.PlatformDependPath)
 		.then(result => {
@@ -25,5 +25,8 @@ module.exports = (Store) => {
 		});
 
 	// Get user status from AsyncStorage then fetch to user props
-	AsyncStorage.getItem('user').then((user) => Store.dispatch(userActions.loginDone(JSON.parse(user))));
+	AsyncStorage.getItem('user').then((user) => {
+		Store.dispatch(userActions.loginDone(JSON.parse(user)));
+		callback();
+	});
 };

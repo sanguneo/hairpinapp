@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { Platform, View, Text, Image, TouchableOpacity } from 'react-native';
-import SQLite from '../service/SQLite';
+import { Platform, View, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
 import {connect} from 'react-redux';
+import * as designActions from '../redux/action/design';
+const RNFS = require('../../service/RNFS_wrapper');
+
+import Thumbnail from "../components/Thumbnail";
 
 const logo = require('../assets/img/logo.png');
 const menu = require('../assets/img/icon/menu.png');
@@ -22,31 +25,46 @@ class MainScreen extends Component {
 			<View style={{width: 32, height: 32, marginHorizontal: 8}}/>
 		),
 	});
+	
+	thumbnails = []
 
 	updateThumbs() {
-		// SQLite.getDesigns(console.log, this.props.user.signhash, 50);
+		const thumbnailPath = `${RNFS.PlatformDependPath}/_thumb_/${signhash}_`;
+		this.props.dispatch(designActions.getDesign(this.props.user.signhash, (designRows)=> {
+			this.thumbnails = designRows.map((row) => <Thumbnail title={row.title} regdate={row.regdate}
+																 source={`${thumbnailPath}${row.photohash}.scalb`} style={{}}/>)
+		}))
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		this.updateThumbs();
 	}
 
 	render() {
 		return (
-			<View>
-				<Text>React Native Boilerplate</Text>
-				<TouchableOpacity onPress={()=>{this.props.navigation.goBack()}}>
-					<Text>{this.props.navigation.state.params? this.props.navigation.state.params.name : ''}</Text>
-				</TouchableOpacity>
+			<View style={styles.wrapper}>
+				<ScrollView style={styles.container}>
+					{this.thumbnails}
+				</ScrollView>
 			</View>
 		);
 	}
 }
 
+const styles = StyleSheet.create({
+	wrapper: {
+		flex: 1,
+	},
+	container: {
+		flex: 1,
+	}
+});
+
 
 
 function mapStateToProps(state) {
 	return {
+		design: state.design,
 		user: state.user,
 		app: state.app
 	};

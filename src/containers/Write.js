@@ -35,13 +35,13 @@ class Write extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			photohash: null,
-			regdate: null,
+			designHash: null,
+			designRegdate: null,
 			designLeftImage: pickphoto,
 			designLeftImageSrc: null,
 			designRightImage: pickphoto,
 			designRightImageSrc: null,
-			designTitle: null,
+			designTitle: '',
 			designTag: [],
 			designRecipe: '',
 			designComment: '',
@@ -57,11 +57,11 @@ class Write extends Component {
 		this.setState({[label]: event.nativeEvent.text});
 	}
 
-	getPhotohash() {
-		let regdate = Date.now();
-		let photohash = new Crypt().getAntCode(regdate);
-		this.setState({regdate, photohash});
-		return photohash;
+	getDesignhash() {
+		const designRegdate = Date.now();
+		const designHash = new Crypt().getAntCode(designRegdate);
+		this.setState({designRegdate, designHash});
+		return designHash;
 	}
 
 	setDesignImage(side) {
@@ -100,7 +100,7 @@ class Write extends Component {
 
 	submit() {
 		if (!this.formCheck()) return;
-		this.getPhotohash();
+		this.getDesignhash();
 		this.combineImage((designMergedImage) => {
 			this.props.dispatch(designActions.saveDesign({ designMergedImage,...this.state}, () => {
 				this.props.navigation.goBack(null);
