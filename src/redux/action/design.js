@@ -9,8 +9,8 @@ const RNFS = require('../../service/RNFS_wrapper');
 import * as types from '../actionType/design';
 import {hairpinserver} from '../../config/env.json';
 
-export function refresh(refresh){
-	return {type: types.DESIGNREFRESH, refresh};
+export function refresh(refreshkey=Date.now()){
+	return {type: types.DESIGNREFRESH, refresh: refreshkey};
 }
 
 export function getDesign(signhash, callback, limit=false, offset=false) {
@@ -19,7 +19,6 @@ export function getDesign(signhash, callback, limit=false, offset=false) {
 	}
 }
 
-
 export function saveDesign(designinfo, callback) {
 	return async (dispatch, getState) => {
 		const {signhash} = getState().user;
@@ -27,14 +26,16 @@ export function saveDesign(designinfo, callback) {
 		
 		const resizeBatch = (sideCase, cb) => {
 			const side = sideCase.charAt(0).toUpperCase() + sideCase.slice(1)
-			ImageResizer.createResizedImage(designinfo[`design${side}Image`].uri.replace('file://', ''), 400, 800, 'JPEG', 100, 0
+			ImageResizer.createResizedImage(designinfo[`design${side}Image`].uri.replace('file://', ''), 400, 800, 'JPEG', 100, 0,
+				RNFS.PlatformDependPath + '/_original_/'
 			).then(({uri}) => {
 				const renamed = `${originalPath}_CROP_${side.toUpperCase()}.scalb`;
 				RNFS.moveFile( uri.replace('file://', ''), renamed).then(() => {
 					RNFS.unlink(designinfo[`design${side}Image`].uri.replace('file://', '')).catch(()=>{});
 				});
 			}).catch((err) => console.log(err));
-			ImageResizer.createResizedImage(designinfo[`design${side}ImageSrc`].uri.replace('file://', ''), 800, 800, 'JPEG', 100, 0
+			ImageResizer.createResizedImage(designinfo[`design${side}ImageSrc`].uri.replace('file://', ''), 800, 800, 'JPEG', 100, 0,
+				RNFS.PlatformDependPath + '/_original_/'
 			).then(({uri}) => {
 				const renamed = `${originalPath}_SRC_${side.toUpperCase()}.scalb`;
 				RNFS.moveFile( uri.replace('file://', ''), renamed).then(() => {});
@@ -52,24 +53,24 @@ export function saveDesign(designinfo, callback) {
 		}
 
 		// done
-		HairpinDB.insertDesign(
-			signhash,
-			designinfo.designHash,
-			designinfo.designRegdate,
-			designinfo.designTitle,
-			designinfo.designRecipe,
-			designinfo.designComment
-		);
-		HairpinDB.insertTag(
-			designinfo.designTag,
-			designinfo.designHash,
-			designinfo.signhash
-		);
+		// HairpinDB.insertDesign(
+		// 	signhash,
+		// 	designinfo.designHash,
+		// 	designinfo.designRegdate,
+		// 	designinfo.designTitle,
+		// 	designinfo.designRecipe,
+		// 	designinfo.designComment
+		// );
+		// HairpinDB.insertTag(
+		// 	designinfo.designTag,
+		// 	designinfo.designHash,
+		// 	designinfo.signhash
+		// );
 		
 		resizeBatch('left',()=> {
 		resizeBatch('right', ()=> {
 		makeThumb(()=> {
-			callback();
+			callback(`${RNFS.PlatformDependPath}/_thumb_/${signhash}_${designinfo.designHash}.scalb`);
 			RNFS.readDir(`${RNFS.PlatformDependPath}/_original_`)
 				.then(result => {
 					const resarr = [];

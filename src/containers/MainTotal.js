@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Platform, View, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
-import {connect} from 'react-redux';
-import * as designActions from '../redux/action/design';
-const RNFS = require('../../service/RNFS_wrapper');
+// import Thumbnail from "../components/Thumbnail";
 
-import Thumbnail from "../components/Thumbnail";
+import {connect} from 'react-redux';
+const RNFS = require('../service/RNFS_wrapper');
+
 
 const logo = require('../assets/img/logo.png');
 const menu = require('../assets/img/icon/menu.png');
@@ -25,26 +25,27 @@ class MainScreen extends Component {
 			<View style={{width: 32, height: 32, marginHorizontal: 8}}/>
 		),
 	});
-	
-	thumbnails = []
 
-	updateThumbs() {
-		const thumbnailPath = `${RNFS.PlatformDependPath}/_thumb_/${signhash}_`;
-		this.props.dispatch(designActions.getDesign(this.props.user.signhash, (designRows)=> {
-			this.thumbnails = designRows.map((row) => <Thumbnail title={row.title} regdate={row.regdate}
-																 source={`${thumbnailPath}${row.photohash}.scalb`} style={{}}/>)
-		}))
-	}
-
-	componentDidMount() {
-		this.updateThumbs();
-	}
+	// updateThumbs() {
+	// 	if(!this.props.user.signhash || this.props.user.signhash === '') return;
+	// 	const thumbnailPath = `${RNFS.PlatformDependPath}/_original_/${this.props.user.signhash}_`;
+	// 	this.props.dispatch(designActions.getDesign(this.props.user.signhash, (designRows)=> {
+	// 		this.setState({thumbnails : designRows.map((row) =>
+	// 			<Thumbnail key={row.idx} title={row.title} regdate={row.regdate}
+	// 					   source={`${thumbnailPath}${row.photohash}.scalb`} style={{}}/>)});
+	// 	}))
+	// }
+	//
+	// componentDidMount() {
+	// 	this.updateThumbs();
+	// }
 
 	render() {
 		return (
 			<View style={styles.wrapper}>
+				
 				<ScrollView style={styles.container}>
-					{this.thumbnails}
+					{/*{this.state.thumbnails}*/}
 				</ScrollView>
 			</View>
 		);

@@ -7,7 +7,7 @@ export default class Thumbnail extends Component {
 	static propTypes = {
 		title: PropTypes.string,
 		regdate: PropTypes.any,
-		source: PropTypes.object.isRequired,
+		source: PropTypes.string.isRequired,
 		style: PropTypes.object.isRequired,
 		onPress: PropTypes.func
 	}
@@ -21,7 +21,7 @@ export default class Thumbnail extends Component {
 			<TouchableOpacity
 				style={[styles.thumbnail, this.props.style]}
 				onPress={this.props.onPress}>
-				<Image source={{uri: this.props.source}} style={styles.thumbImage} />
+				<Image source={{uri: 'file://' + this.props.source.replace('file://', '')}} style={styles.thumbImage} />
 				<Text style={styles.thumbnailText} numberOfLines={1} ellipsizeMode='tail' >{title}</Text>
 			</TouchableOpacity>
 		);

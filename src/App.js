@@ -20,9 +20,9 @@ class App extends React.Component {
 
 	render() {
 		return (
-			<Provider store={Store}>
-				{this.state.loaded ? <BaseNavigation /> : <View/>}
-			</Provider>
+			(this.state.loaded ? (<Provider store={Store}>
+				<BaseNavigation />
+			</Provider>): <View/>)
 		)
 	}
 }
