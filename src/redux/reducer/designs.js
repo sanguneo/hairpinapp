@@ -1,9 +1,10 @@
 import Immutable from 'seamless-immutable';
 
-import * as types from '../actionType/design';
+import * as types from '../actionType/designs';
 
 const initialState = Immutable({
 	refresh: '',
+	designTotalList: []
 });
 
 export default function design(state = initialState, action = {}) {
@@ -11,6 +12,14 @@ export default function design(state = initialState, action = {}) {
 		case types.DESIGNREFRESH :
 			return Object.assign({}, state, {
 				refresh: action.refresh
+			});
+		case types.DESIGNLISTUPDATE :
+			return Object.assign({}, state, {
+				designTotalList: action.designTotalList
+			});
+		case types.PUSHDESIGN :
+			return Object.assign({}, state, {
+				designTotalList: [action.design, ...state.designTotalList]
 			});
 		default:
 			return state;

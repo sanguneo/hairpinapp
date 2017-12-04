@@ -33,7 +33,7 @@ export default class crypt {
 	getCharCodeSerial(input, term = 2) {
 		input += '';
 		let ret = '';
-		for (var i = 0; i < input.length; i = i + term) {
+		for (let i = 0; i < input.length; i = i + term) {
 			ret += input.charCodeAt(i);
 		}
 		return ret;
@@ -48,7 +48,7 @@ export default class crypt {
 		pass += '';
 		let inputtmp = input.length % 2 === 1 ? '0' + input : input;
 		let ret = '';
-		for (var i = 0; i < inputtmp.length; i = i + 2) {
+		for (let i = 0; i < inputtmp.length; i = i + 2) {
 			ret += this.getCharCode(
 				parseInt(inputtmp[i] + inputtmp[i + 1], 10),
 				pass
@@ -57,9 +57,7 @@ export default class crypt {
 		return ret;
 	}
 	getAntCode(input = Date.now()) {
-		return input
-			.toString()
-			.replace(/(.)\1*/g, (seq, key) => key + seq.length.toString());
+		return input.toString().replace(/(.)\1*/g, (seq, key) => key + seq.length.toString());
 	}
 	getDeAntCode(input) {
 		let ret = [];

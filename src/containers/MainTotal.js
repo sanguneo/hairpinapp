@@ -1,14 +1,25 @@
 import React, { Component } from 'react';
-import { Platform, View, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
-
-// import Thumbnail from "../components/Thumbnail";
+import { Dimensions, Platform, View, FlatList, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import Thumbnail from '../components/Thumbnail';
 
 import {connect} from 'react-redux';
+import * as designActions from '../redux/action/designs';
 const RNFS = require('../service/RNFS_wrapper');
 
 
 const logo = require('../assets/img/logo.png');
 const menu = require('../assets/img/icon/menu.png');
+
+const {width, height, deviceWidth, deviceHeight, scale} = (function() {
+	let i = Dimensions.get('window')
+	return {
+		width: i.width,
+		height: i.height,
+		deviceWidth: i.width * i.scale,
+		deviceHeight: i.height * i.scale,
+		scale: i.scale
+	};
+})();
 
 class MainScreen extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -25,28 +36,31 @@ class MainScreen extends Component {
 			<View style={{width: 32, height: 32, marginHorizontal: 8}}/>
 		),
 	});
+	constructor(props) {
+		super(props)
+		this.numColumns = Math.floor(width / 135);
+		console.log(this.numColumns)
+	}
 
-	// updateThumbs() {
-	// 	if(!this.props.user.signhash || this.props.user.signhash === '') return;
-	// 	const thumbnailPath = `${RNFS.PlatformDependPath}/_original_/${this.props.user.signhash}_`;
-	// 	this.props.dispatch(designActions.getDesign(this.props.user.signhash, (designRows)=> {
-	// 		this.setState({thumbnails : designRows.map((row) =>
-	// 			<Thumbnail key={row.idx} title={row.title} regdate={row.regdate}
-	// 					   source={`${thumbnailPath}${row.photohash}.scalb`} style={{}}/>)});
-	// 	}))
-	// }
-	//
-	// componentDidMount() {
-	// 	this.updateThumbs();
-	// }
+
+	updateThumbs() {
+		if(!this.props.user.signhash || this.props.user.signhash === '') return;
+		this.props.dispatch(designActions.getDesignAsync());
+	}
+
+	componentDidMount() {
+		this.updateThumbs();
+	}
 
 	render() {
+		const thumbnailPath = `${RNFS.PlatformDependPath}/_original_/${this.props.user.signhash}_`;
 		return (
 			<View style={styles.wrapper}>
-				
-				<ScrollView style={styles.container}>
-					{/*{this.state.thumbnails}*/}
-				</ScrollView>
+				<FlatList initialNumToRender={20} numColumns={this.numColumns} contentContainerStyle={styles.container}
+						  data={this.props.designs.designTotalList} keyExtractor={item => item.idx}
+						  renderItem={({item}) => <Thumbnail title={item.title} regdate={item.reg_date}
+															 source={`${thumbnailPath}${item.photohash}.scalb`} />}
+				/>
 			</View>
 		);
 	}
@@ -55,17 +69,20 @@ class MainScreen extends Component {
 const styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
+		paddingVertical: 5,
 	},
 	container: {
-		flex: 1,
-	}
+		alignSelf: 'center',
+		alignContent: 'flex-start',
+		justifyContent: 'flex-start'
+	},
 });
 
 
 
 function mapStateToProps(state) {
 	return {
-		design: state.design,
+		designs: state.designs,
 		user: state.user,
 		app: state.app
 	};

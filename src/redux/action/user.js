@@ -11,15 +11,6 @@ export function refresh(refreshkey=Date.now()){
 }
 
 export function loginDone(user){
-	RNFS.readDir(`${RNFS.PlatformDependPath}/_thumb_`)
-		.then(result => {
-			const resarr = [];
-			result.forEach(e => resarr.push(e.path));
-			console.log(resarr);
-		})
-		.catch(err => {
-			console.error(err.message, err.code);
-		});
 	AsyncStorage.setItem('user', JSON.stringify(user));
 	return {type: types.LOGGEDIN, user};
 }

@@ -6,17 +6,28 @@ import HairpinDB from '../../service/HairpinDB'
 
 const RNFS = require('../../service/RNFS_wrapper');
 
-import * as types from '../actionType/design';
+import * as types from '../actionType/designs';
 import {hairpinserver} from '../../config/env.json';
 
 export function refresh(refreshkey=Date.now()){
 	return {type: types.DESIGNREFRESH, refresh: refreshkey};
 }
 
-export function getDesign(signhash, callback, limit=false, offset=false) {
+export function getDesign(designTotalList){
+	return {type: types.DESIGNLISTUPDATE, designTotalList};
+}
+
+export function getDesignAsync(limit=false, offset=false) {
 	return async (dispatch, getState) => {
-		HairpinDB.getDesigns(callback, signhash, limit, offset);
+		const {signhash} = getState().user;
+		HairpinDB.getDesigns((designTotalList) => {
+			dispatch(getDesign(designTotalList));
+		}, signhash, limit, offset);
 	}
+}
+
+export function pushDesign(design){
+	return {type: types.PUSHDESIGN, design};
 }
 
 export function saveDesign(designinfo, callback) {
@@ -52,36 +63,22 @@ export function saveDesign(designinfo, callback) {
 			});
 		}
 
-		// done
-		// HairpinDB.insertDesign(
-		// 	signhash,
-		// 	designinfo.designHash,
-		// 	designinfo.designRegdate,
-		// 	designinfo.designTitle,
-		// 	designinfo.designRecipe,
-		// 	designinfo.designComment
-		// );
-		// HairpinDB.insertTag(
-		// 	designinfo.designTag,
-		// 	designinfo.designHash,
-		// 	designinfo.signhash
-		// );
+		HairpinDB.insertDesign(	signhash, designinfo.designHash, designinfo.designRegdate,
+								designinfo.designTitle, designinfo.designRecipe, designinfo.designComment);
+		HairpinDB.insertTag(designinfo.designTag, designinfo.designHash, designinfo.signhash);
 		
-		resizeBatch('left',()=> {
-		resizeBatch('right', ()=> {
-		makeThumb(()=> {
+		resizeBatch('left',() => resizeBatch('right', () => makeThumb(()=>{
 			callback(`${RNFS.PlatformDependPath}/_thumb_/${signhash}_${designinfo.designHash}.scalb`);
-			RNFS.readDir(`${RNFS.PlatformDependPath}/_original_`)
-				.then(result => {
-					const resarr = [];
-					result.forEach(e => resarr.push(e.path));
-					console.log(resarr);
-				})
-				.catch(err => {
-					console.error(err.message, err.code);
-				});
-		});});});
-		// done
+			dispatch(pushDesign({
+				signhash,
+				photohash: designinfo.designHash,
+				reg_date: designinfo.designRegdate,
+				title: designinfo.designTitle,
+				recipe: designinfo.designRecipe,
+				comment: designinfo.designComment,
+				uploaded: 0
+			}));
+		})))
 	}
 }
 

@@ -28,7 +28,6 @@ class HairpinDBClass {
 	insertDesign(signhash, photohash, regdate, title, recipe, comment) {
 		const query = `INSERT INTO 'ca_photo'('signhash', 'photohash','reg_date','title','recipe','comment') ` +
 			`VALUES ('${signhash}', '${photohash}','${regdate}','${title}','${recipe.replace('\n', '\\n')}','${comment.replace('\n', '\\n')}');`;
-		console.log(query);
 		this.executeQuery(query);
 	}
 

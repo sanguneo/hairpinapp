@@ -5,7 +5,7 @@ import { captureRef } from "react-native-view-shot";
 import Crypt from '../utils/Crypt';
 
 import {connect} from 'react-redux';
-import * as designActions from '../redux/action/design';
+import * as designActions from '../redux/action/designs';
 
 
 import FormWrapper from '../components/FormWrapper';
@@ -35,7 +35,6 @@ class Write extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			merged: null,
 			designHash: null,
 			designRegdate: null,
 			designLeftImage: pickphoto,
@@ -103,12 +102,9 @@ class Write extends Component {
 		if (!this.formCheck()) return;
 		this.getDesignhash();
 		this.combineImage((designMergedImage) => {
-			this.props.dispatch(designActions.saveDesign({ designMergedImage,...this.state}, (m) => {
-				this.setState({
-					merged: {uri: 'file://'+m}
-				})
-				//this.props.navigation.goBack(null);
-			}));
+			this.props.dispatch(designActions.saveDesign({ designMergedImage,...this.state},
+				() => this.props.navigation.goBack(null)
+			));
 		});
 	}
 
@@ -116,7 +112,6 @@ class Write extends Component {
 		return (
 			<View style={styles.wrapper}>
 				<ScrollView style={styles.container} ref={ref=> this.ScrollView = ref} onScroll={event => this._whereLine(event)}  keyboardShouldPersistTaps='handled'>
-					<Image source={this.state.merged} style={{width: 100, height: 100}}/>
 					<View style={styles.imgView} ref={ref=> this.imgView = ref} collapsable={false}>
 						<TouchableOpacity onPress={()=> {this.setDesignImage('left')}}>
 							<Image source={this.state.designLeftImage} style={styles.img} />
