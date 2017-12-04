@@ -12,17 +12,12 @@ export default class Thumbnail extends Component {
 		onPress: PropTypes.func
 	}
 	render() {
-		const title = this.props.title
-			? this.props.title
-			: this.props.regdate
-				? Formatter.dateFormatter(this.props.regdate)
-				: 'noname';
 		return (
 			<TouchableOpacity
 				style={[styles.thumbnail, this.props.style]}
 				onPress={this.props.onPress}>
 				<Image source={{uri: 'file://' + this.props.source.replace('file://', '')}} style={styles.thumbImage} />
-				<Text style={styles.thumbnailText} numberOfLines={1} ellipsizeMode='tail'>{title}</Text>
+				<Text style={styles.thumbnailText} numberOfLines={1} ellipsizeMode='tail'>{this.props.title}</Text>
 			</TouchableOpacity>
 		);
 	}
@@ -43,7 +38,8 @@ const styles = StyleSheet.create({
 	},
 	thumbImage: {
 		width: 125,
-		height: 125
+		height: 125,
+		alignSelf:'center'
 	},
 	thumbnailText: {
 		height: 40,

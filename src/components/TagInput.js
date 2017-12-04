@@ -75,7 +75,8 @@ class TagInput extends Component {
 		inputColor: PropTypes.string,
 		inputProps: PropTypes.object,
 		labelKey: PropTypes.string,
-		numberOfLines: PropTypes.number
+		numberOfLines: PropTypes.number,
+		readOnly: PropTypes.bool
 	};
 
 	props: Props;
@@ -275,7 +276,7 @@ class TagInput extends Component {
 
 		return (
 			<TouchableWithoutFeedback
-				onPress={() => this.refs.tagInput.focus()}
+				onPress={() => !this.props.readOnly && this.refs.tagInput.focus()}
 				onLayout={this.measureWrapper}
 				style={[this.props.style,styles.container]}>
 				<View style={styles.wrapper}
@@ -285,7 +286,7 @@ class TagInput extends Component {
 						onContentSizeChange={(w, h) => { this.contentHeight = h;}}>
 						<View style={[ styles.tagInputContainer, this.props.tagInputContainerStyle]}>
 							{value.map((tag, index) => this._renderTag(tag, index))}
-							<View style={[{width: inputWidth}]}>
+							{!this.props.readOnly ? <View style={[{width: inputWidth}]}>
 								<TextInput
 									ref="tagInput"
 									blurOnSubmit={false}
@@ -297,7 +298,12 @@ class TagInput extends Component {
 									onSubmitEditing={this.parseTags}
 									{...inputProps}
 								/>
-							</View>
+							</View> : <TextInput
+								value={text}
+								style={[styles.textInputNone, {color: inputColor}]}
+								{...inputProps}
+							/>
+							}
 						</View>
 					</View>
 				</View>
@@ -324,7 +330,14 @@ const styles = StyleSheet.create({
 		flexDirection: 'row'
 	},
 	textInput: {
-		marginLeft: 5,
+		marginLeft: 3,
+		height: 40,
+		fontSize: 15,
+		padding: 0
+	},
+	textInputNone: {
+		flex: 1,
+		marginLeft: 3,
 		height: 40,
 		fontSize: 15,
 		padding: 0

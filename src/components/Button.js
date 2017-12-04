@@ -51,14 +51,14 @@ class Button extends Component {
 }
 
 const styles = StyleSheet.create({
-	touchable: {
-		flex: 1
-	},
 	container: {
+		flex: 1,
+		borderRadius: 5,
+	},
+	touchable: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		borderRadius: 5,
 	},
 	image: {
 		width: 30,

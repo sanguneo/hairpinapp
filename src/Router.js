@@ -9,6 +9,9 @@ import Modify from './containers/Modify';
 
 import MainTotal from './containers/MainTotal';
 import Write from './containers/Write';
+import Edit from './containers/Edit';
+import Reveal from './containers/Reveal';
+import ImgSourceView from './containers/ImgSourceView';
 
 
 // Advertise (Must located under other components)
@@ -16,13 +19,16 @@ import FooterAdBar from "./containers/FooterAdBar";
 
 
 const StackNavigation = StackNavigator({
-	Main	:	{ screen: MainTotal		},
-	Total	:	{ screen: MainTotal 	},
-	Write	:	{ screen: Write 		},
+	Main			:	{ screen: MainTotal		},
+	Total			:	{ screen: MainTotal 	},
+	Write			:	{ screen: Write 		},
+	Edit			:	{ screen: Edit			},
+	Reveal			:	{ screen: Reveal 		},
+	ImgSourceView	:	{ screen: ImgSourceView	},
 
-	Login	:	{ screen: Login 		},
-	Join	:	{ screen: Join 			},
-	Modify	:	{ screen: Modify 		},
+	Login			:	{ screen: Login 		},
+	Join			:	{ screen: Join 			},
+	Modify			:	{ screen: Modify 		},
 }, {
 	cardStyle: { backgroundColor: '#fff'},
 	transitionConfig: () => ({ screenInterpolator: CardStackStyleInterpolator.forHorizontal }),

@@ -23,9 +23,9 @@ const ImgOpt = {
 	cropping: true
 }
 
-class Write extends Component {
+class Edit extends Component {
 	static navigationOptions = ({ navigation }) => ({
-		headerTitle: '디자인 작성하기',
+		headerTitle: `${navigation.state.params.screentitle} 수정`,
 		headerTitleStyle :{alignSelf: 'center', color: '#fff', fontWeight: 'normal'},
 		headerRight: (
 			<View style={{width: 32, height: 32, marginHorizontal: 8}}/>
@@ -34,18 +34,7 @@ class Write extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {
-			designHash: null,
-			designRegdate: null,
-			designLeftImage: pickphoto,
-			designLeftImageSrc: null,
-			designRightImage: pickphoto,
-			designRightImageSrc: null,
-			designTitle: '',
-			designTag: [],
-			designRecipe: '',
-			designComment: '',
-		}
+		this.state = Object.assign({}, this.props.navigation.state.params);
 		this.scrollYPos = 0;
 	}
 
@@ -55,13 +44,6 @@ class Write extends Component {
 
 	handleInputChange(label, event) {
 		this.setState({[label]: event.nativeEvent.text});
-	}
-
-	getDesignhash() {
-		const designRegdate = Date.now();
-		const designHash = new Crypt().getAntCode(designRegdate);
-		this.setState({designRegdate, designHash});
-		return designHash;
 	}
 
 	setDesignImage(side) {
@@ -100,10 +82,12 @@ class Write extends Component {
 
 	submit() {
 		if (!this.formCheck()) return;
-		this.getDesignhash();
 		this.combineImage((designMergedImage) => {
-			this.props.dispatch(designActions.saveDesign({ designMergedImage,...this.state},
-				() => this.props.navigation.goBack(null)
+			this.props.dispatch(designActions.resaveDesign({ designMergedImage,...this.state},
+				() => {
+					this.props.navigation.state.params.update()
+					this.props.navigation.goBack(null);
+				}
 			));
 		});
 	}
@@ -231,6 +215,6 @@ function mapStateToProps(state) {
 	};
 }
 
-export default connect(mapStateToProps)(Write);
+export default connect(mapStateToProps)(Edit);
 
 

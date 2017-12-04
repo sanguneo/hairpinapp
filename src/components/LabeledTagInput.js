@@ -20,7 +20,7 @@ class LabeledTagInput extends Component {
 	};
 	static defaultProps = {
 		label: '라벨',
-		placeholder: '여기에 입력해 주세요',
+		placeholder: '태그를 입력하세요',
 		onChange: this.handleInputChange,
 		secureTextEntry: false,
 		style: {},
@@ -64,14 +64,13 @@ class LabeledTagInput extends Component {
 				<View style={styles.input}>
 					<TagInput value={this.state.tags}
 						onChange={this.onChangeTags}
-						// tagColor={commonStyle.placeholderTextColor}
-						// placeholderTextColor={commonStyle.placeholderTextColor}
 						tagTextColor="white"
 						inputProps={{
 							keyboardType: 'default',
-							placeholder: '태그',
+							placeholder: this.props.placeholder,
 							autoFocus: false
 						}}
+						readOnly={this.props.readOnly}
 						parseOnBlur={true}
 						numberOfLines={99}
 						ref={'tag'}

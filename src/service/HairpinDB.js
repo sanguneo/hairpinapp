@@ -51,9 +51,23 @@ class HairpinDBClass {
 	getDesigns(callback, signhash, limit=false, offset=false) {
 		const query = `SELECT * FROM ca_photo WHERE signhash='${signhash}' ORDER BY idx DESC${limit ? (' LIMIT ' + limit) : ''}${offset?(' OFFSET ' + offset): ''};`;
 		this.executeQuery(query, (results) => {
-			const rows = results.rows.raw(); // shallow copy of rows Array
-			callback(rows);
+			callback(results.rows.raw());
 		});
+	}
+	getOneDesign(callback, designHash, signhash) {
+		const query = `SELECT * FROM ca_photo WHERE signhash='${signhash}'AND photohash='${designHash}';`;
+		const tagquery = `SELECT * FROM ca_tag WHERE signhash='${signhash}'AND photohash='${designHash}';`;
+		this.executeQuery(query, (results) => {
+			this.executeQuery(tagquery, (tagresults) => {
+				callback(results.rows.raw()[0], tagresults.rows.raw().map(tag=> tag.name));
+			});
+		});
+	}
+
+	updateDesign(signhash, photohash, regdate, title, recipe, comment) {
+		let query = "UPDATE `ca_photo` SET `title` = '" + title + "',`recipe` = '" + recipe.replace('\n', '\\n') + "',`comment` = '" + comment.replace('\n', '\\n') + "'" +
+			"  WHERE `photohash` = '"+photohash+"' AND `signhash` = '"+signhash+"'";
+		this.executeQuery(query);
 	}
 
 }

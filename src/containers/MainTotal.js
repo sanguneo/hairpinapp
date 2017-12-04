@@ -5,13 +5,14 @@ import Thumbnail from '../components/Thumbnail';
 import {connect} from 'react-redux';
 import * as designActions from '../redux/action/designs';
 const RNFS = require('../service/RNFS_wrapper');
+import Formatter from '../utils/Formatter';
 
 
 const logo = require('../assets/img/logo.png');
 const menu = require('../assets/img/icon/menu.png');
 
 const {width, height, deviceWidth, deviceHeight, scale} = (function() {
-	let i = Dimensions.get('window')
+	let i = Dimensions.get('window');
 	return {
 		width: i.width,
 		height: i.height,
@@ -39,27 +40,32 @@ class MainScreen extends Component {
 	constructor(props) {
 		super(props)
 		this.numColumns = Math.floor(width / 135);
-		console.log(this.numColumns)
-	}
-
-
-	updateThumbs() {
-		if(!this.props.user.signhash || this.props.user.signhash === '') return;
-		this.props.dispatch(designActions.getDesignAsync());
+		this.goDesign = this.goDesign.bind(this);
 	}
 
 	componentDidMount() {
-		this.updateThumbs();
+		if(!this.props.user.signhash || this.props.user.signhash === '') return;
+		this.props.dispatch(designActions.getDesignsAsync());
+	}
+
+	goDesign(designHash, screentitle) {
+		this.props.navigation.navigate('Reveal', {designHash, screentitle});
 	}
 
 	render() {
 		const thumbnailPath = `${RNFS.PlatformDependPath}/_original_/${this.props.user.signhash}_`;
+		const {refresh} = this.props.designs;
 		return (
 			<View style={styles.wrapper}>
 				<FlatList initialNumToRender={20} numColumns={this.numColumns} contentContainerStyle={styles.container}
 						  data={this.props.designs.designTotalList} keyExtractor={item => item.idx}
-						  renderItem={({item}) => <Thumbnail title={item.title} regdate={item.reg_date}
-															 source={`${thumbnailPath}${item.photohash}.scalb`} />}
+						  renderItem={({item}) => {
+							  const title = item.title ? item.title : item.reg_date
+								  									? Formatter.dateFormatter(item.reg_date) : 'noname';
+							  return <Thumbnail title={title}
+										 designHash={item.photohash}
+										 source={`${thumbnailPath}${item.photohash}.scalb?refresh=${refresh}`}
+										 onPress={() => this.goDesign(item.photohash, title)}/>}}
 				/>
 			</View>
 		);
