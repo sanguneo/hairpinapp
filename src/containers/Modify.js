@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { View, ScrollView, Image, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-const RNFS = require('../service/RNFS_wrapper');
-
+import RNFS from '../service/RNFS_wrapper';
 import {connect} from 'react-redux';
 import * as userActions from '../redux/action/user';
-
-
 
 import {emailcheck} from '../utils/Validation';
 
@@ -14,9 +11,6 @@ import FormWrapper from '../components/FormWrapper';
 import LabeledInput from '../components/LabeledInput';
 import Button from '../components/Button';
 import Hr from '../components/Hr';
-
-import profile from '../assets/img/profile.png';
-
 
 class Modify extends Component {
 	static navigationOptions = ({ navigation }) => ({

@@ -1,7 +1,7 @@
 import {AsyncStorage, Alert} from 'react-native';
 
 import axios from 'axios';
-const RNFS = require('../../service/RNFS_wrapper');
+import RNFS from '../../service/RNFS_wrapper';
 
 import * as types from '../actionType/user';
 import {hairpinserver} from '../../config/env.json';

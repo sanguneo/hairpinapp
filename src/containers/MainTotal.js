@@ -4,7 +4,7 @@ import Thumbnail from '../components/Thumbnail';
 
 import {connect} from 'react-redux';
 import * as designActions from '../redux/action/designs';
-const RNFS = require('../service/RNFS_wrapper');
+import RNFS from '../service/RNFS_wrapper';
 import Formatter from '../utils/Formatter';
 
 
@@ -49,7 +49,7 @@ class MainScreen extends Component {
 	}
 
 	goDesign(designHash, screentitle) {
-		this.props.navigation.navigate('Reveal', {designHash, screentitle});
+		this.props.navigation.navigate('Reveal', {designHash, screentitle, dispatch: this.props.dispatch.bind(this)});
 	}
 
 	render() {

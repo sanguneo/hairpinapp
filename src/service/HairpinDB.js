@@ -31,7 +31,7 @@ class HairpinDBClass {
 		this.executeQuery(query);
 	}
 
-	insertTag(iTags, photohash, signhash) {
+	insertTag(signhash, photohash, iTags) {
 		const tagquery = `DELETE FROM 'ca_tag' WHERE 'photohash'='${photohash}' AND 'signhash'='${signhash}';`;
 		const tagreturn = (tag) => `INSERT INTO 'ca_tag'('name','photohash','signhash') VALUES ('${tag}','${photohash}','${signhash}');`;
 		// let tagnamereturn = (tag) => `INSERT INTO 'ca_tagname'('tagname') SELECT '${tag}' WHERE NOT EXISTS(SELECT 1 FROM 'ca_tagname' WHERE 'tagname' = '${tag}');`;
@@ -64,10 +64,17 @@ class HairpinDBClass {
 		});
 	}
 
-	updateDesign(signhash, photohash, regdate, title, recipe, comment) {
-		let query = "UPDATE `ca_photo` SET `title` = '" + title + "',`recipe` = '" + recipe.replace('\n', '\\n') + "',`comment` = '" + comment.replace('\n', '\\n') + "'" +
+	updateDesign(signhash, photohash, title, recipe, comment) {
+		const query = "UPDATE `ca_photo` SET `title` = '" + title + "',`recipe` = '" + recipe.replace('\n', '\\n') + "',`comment` = '" + comment.replace('\n', '\\n') + "'" +
 			"  WHERE `photohash` = '"+photohash+"' AND `signhash` = '"+signhash+"'";
 		this.executeQuery(query);
+	}
+
+	deleteDesign(signhash, photohash) {
+		const query  = "DELETE FROM `ca_photo` WHERE `photohash` = '"+photohash+"' AND `signhash` = '"+signhash+"'";
+		const tagquery = "DELETE FROM `ca_tag` WHERE `photohash` = '"+photohash+"' AND `signhash` = '"+signhash+"'";
+		this.executeQuery(query);
+		this.executeQuery(tagquery);
 	}
 
 }

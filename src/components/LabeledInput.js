@@ -30,32 +30,16 @@ class LabeledInput extends Component {
 		readOnly: false
 	};
 
-	constructor(props) {
-		super(props);
-		this.state = {
-			value: props.value,
-			label: props.label,
-			placeholder: props.placeholder,
-		}
-		this.handleInputChange = this.handleInputChange.bind(this);
-	}
-
-	handleInputChange(event) {
-		this.setState({
-			value: event.nativeEvent.text
-		});
-	}
-
 	render() {
 		return (
 			<KeyboardAvoidingView style={[styles.wrapper, this.props.style]}>
-				<Text style={[styles.label, this.props.labelStyle]}>{this.state.label}</Text>
+				<Text style={[styles.label, this.props.labelStyle]}>{this.props.label}</Text>
 				<TextInput style={[styles.input, this.props.inputStyle]}
 						   ref={ref => this.textinput = ref}
-						   value={this.state.value}
+						   value={this.props.value}
 						   onChange={this.props.onChange}
 						   editable={!this.props.readOnly}
-						   placeholder={this.state.placeholder}
+						   placeholder={this.props.placeholder}
 						   underlineColorAndroid={'transparent'}
 						   underlineColorIos={'transparent'}
 						   placeholderTextColor={this.props.placeholderTextColor}

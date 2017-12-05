@@ -1,7 +1,7 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 import { View, Text, Image, TouchableOpacity, Alert, StyleSheet } from 'react-native';
-const RNFS = require('../service/RNFS_wrapper');
+import RNFS from '../service/RNFS_wrapper';
 
 import {connect} from 'react-redux';
 

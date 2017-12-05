@@ -1,5 +1,5 @@
 'use strict';
-const RNFS = require('./RNFS_wrapper');
+import RNFS from './RNFS_wrapper';
 
 import {AsyncStorage} from 'react-native';
 import * as userActions from '../redux/action/user';

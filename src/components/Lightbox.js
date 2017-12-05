@@ -1,6 +1,3 @@
-/**
- * Created by 나상권 on 2017-05-18.
- */
 'use strict';
 
 import React, {Component} from 'react';
@@ -25,18 +22,24 @@ export default class Lightbox extends Component {
 		children: PropTypes.element.isRequired
 	};
 
+	static defaultProps = {
+		fromValue: 0,
+		toValue: 1,
+		duration: 500,
+		bgColor: 'white',
+		color: 'black',
+		stylekey: 'opacity'
+	};
+
 	state = {height: 0};
 	collapsedStyle = {};
 
+
 	_propclose() {
-		if (this.props.close) {
-			this.props.close();
-		}
+		if (this.props.close) this.props.close();
 	}
 	_open() {
-		setTimeout(() => {
-			this.setState({height});
-		}, 50);
+		setTimeout(() => this.setState({height}), 50);
 		Animated.timing(this.animatedValue, {
 			toValue: this.props.toValue,
 			duration: this.props.duration
@@ -47,56 +50,29 @@ export default class Lightbox extends Component {
 			toValue: this.props.fromValue,
 			duration: this.props.duration
 		}).start();
-		setTimeout(() => {
-			this.setState({height: 0});
-		}, this.props.duration + 50);
+		setTimeout(() => this.setState({height: 0}), this.props.duration + 50);
 	}
 
 	componentWillMount() {
-		if (this.props.collapsed) {
-			this.collapsedStyle = {paddingTop: 0, marginBottom: 0};
-		}
+		if (this.props.collapsed) this.collapsedStyle = {paddingTop: 0, marginBottom: 0};
 		this.animatedValue = new Animated.Value(this.props.fromValue);
-	}
-	componentDidMount() {
-		// this._open();
 	}
 	render() {
 		const animatedStyle = {};
 		animatedStyle[this.props.stylekey] = this.animatedValue;
 		const top = !this.props.hideTop
-			? [
-
-					<TouchableOpacity
-						key={'icon'}
-						style={[styles.closeBtn]}
-						onPress={() => {
-							this._close();
-							this._propclose();
-						}}>
-						<Image
-							source={require('../assets/img/icon/close.png')}
-							style={[styles.close, {tintColor: this.props.color}]}
-						/>
-					</TouchableOpacity>,
-					<Text key={'title'} style={[styles.title, {color: this.props.color}]}>
-						{this.props.title}
-					</Text>
-				]
-			: null;
+			? [	<TouchableOpacity key={'icon'} style={[styles.closeBtn]} onPress={() => { this._close(); this._propclose(); }}>
+					<Image source={require('../assets/img/icon/close.png')} style={[styles.close, {tintColor: this.props.color}]} />
+				</TouchableOpacity>,
+				<Text key={'title'} style={[styles.title, {color: this.props.color}]}>
+					{this.props.title}
+				</Text>
+			] : null;
 		const collapsedStyle = {};
-		if (this.props.hideTop) {
-			collapsedStyle.paddingTop = 0;
-		}
+		if (this.props.hideTop) collapsedStyle.paddingTop = 0;
 		return (
-			<Animated.View
-				style={[styles.container, animatedStyle, this.props.style, this.state]}>
-				<View
-					style={[
-						styles.animatedview,
-						{backgroundColor: this.props.bgColor},
-						collapsedStyle
-					]}>
+			<Animated.View style={[styles.container, animatedStyle, this.props.style, this.state]}>
+				<View style={[ styles.animatedview, {backgroundColor: this.props.bgColor}, collapsedStyle ]}>
 					{top}
 					{this.props.children}
 				</View>

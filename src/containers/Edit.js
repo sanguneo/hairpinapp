@@ -34,7 +34,7 @@ class Edit extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = Object.assign({}, this.props.navigation.state.params);
+		this.state = Object.assign({}, this.props.designs.revealedDesign);
 		this.scrollYPos = 0;
 	}
 
@@ -85,7 +85,6 @@ class Edit extends Component {
 		this.combineImage((designMergedImage) => {
 			this.props.dispatch(designActions.resaveDesign({ designMergedImage,...this.state},
 				() => {
-					this.props.navigation.state.params.update()
 					this.props.navigation.goBack(null);
 				}
 			));
@@ -210,6 +209,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
 	return {
+		designs: state.designs,
 		user: state.user,
 		app: state.app
 	};

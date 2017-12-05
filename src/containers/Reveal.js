@@ -14,13 +14,16 @@ import Hr from '../components/Hr';
 import recipe from '../assets/img/icon/recipe.png';
 import comment from '../assets/img/icon/comment.png';
 import cut from '../assets/img/icon/cut.png';
+import remove from '../assets/img/icon/remove.png';
 
 class Reveal extends Component {
 	static navigationOptions = ({ navigation }) => ({
 		headerTitle: navigation.state.params.screentitle,
 		headerTitleStyle :{alignSelf: 'center', color: '#fff', fontWeight: 'normal'},
 		headerRight: (
-			<View style={{width: 32, height: 32, marginHorizontal: 8}}/>
+			<TouchableOpacity onPress={()=>navigation.state.params.dispatch(designActions.deleteDesign(() => navigation.goBack(null)))}>
+				<Image style={{width: 28, height: 28, marginHorizontal: 10, tintColor: 'white'}} source={remove}/>
+			</TouchableOpacity>
 		),
 	})
 
@@ -43,20 +46,17 @@ class Reveal extends Component {
 	getDesignSourceImage(side) {
 		if(!side || side === '' || !['left', 'right'].includes(side)) return;
 		const sideCase = side.charAt(0).toUpperCase() + side.slice(1);
-		this.props.navigation.navigate('ImgSourceView', {image: this.state[`design${sideCase}ImageSrc`].uri, screentitle: (side==='left' ? 'Before' : 'After')});
+		this.props.navigation.navigate('ImgSourceView', {image: this.props.designs.revealedDesign[`design${sideCase}ImageSrc`].uri, screentitle: (side==='left' ? 'Before' : 'After')});
 	}
 
 	componentWillMount() {
 		const {designHash} = this.props.navigation.state.params;
-		this.props.dispatch(designActions.getOneDesignAsync(designHash, (designInfo)=> {
-			this.setState(designInfo);
-		}));
+		this.props.dispatch(designActions.getOneDesignAsync(designHash));
 	}
 
 
 	edit() {
 		this.props.navigation.navigate('Edit', {
-			...this.state,
 			screentitle: this.props.navigation.state.params.screentitle
 		});
 	}
@@ -71,10 +71,10 @@ class Reveal extends Component {
 				<ScrollView style={styles.container} >
 					<View style={styles.imgView} ref={ref=> this.imgView = ref} collapsable={false}>
 						<TouchableOpacity onPress={()=> {this.getDesignSourceImage('left')}}>
-							<Image source={this.state.designLeftImage} style={styles.img} />
+							<Image source={this.props.designs.revealedDesign.designLeftImage} style={styles.img} />
 						</TouchableOpacity>
 						<TouchableOpacity onPress={()=> {this.getDesignSourceImage('right')}}>
-							<Image source={this.state.designRightImage} style={styles.img} />
+							<Image source={this.props.designs.revealedDesign.designRightImage} style={styles.img} />
 						</TouchableOpacity>
 					</View>
 					<View style={styles.imgLabels}>
@@ -83,20 +83,16 @@ class Reveal extends Component {
 					</View>
 					<Text style={styles.formLabel}>기본정보</Text>
 					<FormWrapper style={{flex: 1, marginHorizontal: 10}}>
-						<LabeledInput label="제목" placeholder="제목없음"
-									  value={this.state.designTitle}
-									  readOnly={true}
-									  onChange={(e) => this.handleInputChange('designTitle', e)} />
+						<LabeledInput label="제목" placeholder="제목없음"readOnly={true}
+									  value={this.props.designs.revealedDesign.designTitle} />
 						<Hr lineColor="#878787" />
-						<LabeledTagInput label="테그" placeholder="테그없음"
-										 onChange={(designTag)=>{this.setState({designTag})}}
-										 readOnly={true}
-										 value={this.state.designTag}/>
+						<LabeledTagInput label="테그" placeholder="테그없음" readOnly={true}
+										 value={this.props.designs.revealedDesign.designTag}/>
 					</FormWrapper>
-					<View style={styles.btns}>{this.state.designRecipe ?
+					<View style={styles.btns}>{this.props.designs.revealedDesign.designRecipe ?
 						<Button label="레시피" onPress={()=> this.openLightbox('recipe')}
 								buttonColor="#ff412b" source={recipe} style={{flex: 1, marginHorizontal: 10}}/>
-						: null}{this.state.designComment ?
+						: null}{this.props.designs.revealedDesign.designComment ?
 						<Button label="코멘트" onPress={()=> this.openLightbox('comment')}
 								buttonColor="#3692d9" source={comment} style={{flex: 1, marginHorizontal: 10}}/>: null}
 					</View>
@@ -105,19 +101,17 @@ class Reveal extends Component {
 								buttonColor="#bd6592" source={cut} style={{flex: 1, marginHorizontal: 10}}/>
 					</View>
 				</ScrollView>
-				<Lightbox title={'레시피'} duration={500} fromValue={0} ref={ref => this.recipe = ref}
-						  toValue={1} stylekey={'opacity'} bgColor={'#ffffff'} color={'#000'}>
+				<Lightbox title={'레시피'} ref={ref => this.recipe = ref}>
 					<View style={{ paddingHorizontal: 10, paddingBottom: 10 }}>
 						<Text style={{paddingTop: 10, paddingBottom: 5, fontSize: 16}}>
-							{this.state.designRecipe === '' ? '레시피없음' : this.state.designRecipe}
+							{this.props.designs.revealedDesign.designRecipe === '' ? '레시피없음' : this.props.designs.revealedDesign.designRecipe}
 						</Text>
 					</View>
 				</Lightbox>
-				<Lightbox title={'코멘트'} duration={500} fromValue={0} ref={ref => this.comment = ref}
-						  toValue={1} stylekey={'opacity'} bgColor={'#ffffff'} color={'#000'}>
+				<Lightbox title={'코멘트'} ref={ref => this.comment = ref}>
 					<View style={{ paddingHorizontal: 10, paddingBottom: 10 }}>
 						<Text style={{paddingTop: 10, paddingBottom: 5, fontSize: 16}}>
-							{this.state.designComment === '' ? '레시피없음' : this.state.designComment}
+							{this.props.designs.revealedDesign.designComment === '' ? '레시피없음' : this.props.designs.revealedDesign.designComment}
 						</Text>
 					</View>
 				</Lightbox>
