@@ -15,7 +15,8 @@ const initialState = Immutable({
 		designTitle: '',
 		designTag: [],
 		designRecipe: '',
-		designComment: ''
+		designComment: '',
+		designUploaded: 0
 	}
 });
 

@@ -91,17 +91,17 @@ class Login extends Component {
 					{!loggedin ?
 						[
 							<View style={styles.btns} key={'login'}>
-								<Button label="로그인" onPress={()=> {this.login()}} buttonColor="#3692d9"/>
+								<Button label="로그인" onPress={()=> {this.login()}} buttonColor="#3692d9" style={{width: 300}}/>
 							</View>,
 							<View style={[styles.btns, {marginTop: 10}]} key={'join'}>
-								<Button label="회원가입" onPress={()=> {this.props.navigation.navigate('Join')}} buttonColor="#bd6592"/>
+								<Button label="회원가입" onPress={()=> {this.props.navigation.navigate('Join')}} buttonColor="#bd6592" style={{width: 300}}/>
 							</View>
 						] : [
 							<View style={styles.btns} key={'logout'}>
-								<Button label="로그아웃" onPress={()=> {this.logout()}} buttonColor="#d9663c"/>
+								<Button label="로그아웃" onPress={()=> {this.logout()}} buttonColor="#d9663c" style={{width: 300}}/>
 							</View>,
 							<View style={[styles.btns, {marginTop: 10}]} key={'modify'}>
-								<Button label="정보수정" onPress={()=> {this.props.navigation.navigate('Modify')}} buttonColor="#bd6592"/>
+								<Button label="정보수정" onPress={()=> {this.props.navigation.navigate('Modify')}} buttonColor="#bd6592" style={{width: 300}}/>
 							</View>
 						]
 					}

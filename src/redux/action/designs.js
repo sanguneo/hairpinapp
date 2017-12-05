@@ -56,6 +56,7 @@ export function getOneDesignAsync(designHash) {
 				designTag: oneDesignTag,
 				designRecipe: oneDesign.recipe,
 				designComment: oneDesign.comment,
+				designUploaded: oneDesign.uploaded
 			}));
 		}, designHash, signhash);
 	}
@@ -180,13 +181,15 @@ export function deleteDesign(callback=(()=>{})) {
 			callback();
 		}
 
-		Alert.alert('','삭제하면 복구할 수 없습니다.\n그래도 삭제하시겠습니까?\n',
+		Alert.alert(null,'삭제하면 복구할 수 없습니다.\n그래도 삭제하시겠습니까?\n',
 			[{text: '확인', onPress: () => {doDelete()}}, {text: '취소'}]);
 	}
 }
 
-export function uploadDesign(designinfo, callback) {
-	return async (dispatch) => {
-		console.log(designinfo);
+export function uploadDesign(type=0,callback=(()=>{})) {
+	return async (dispatch, getState) => {
+		const {signhash} = getState().user;
+		const {designHash} = getState().designs.revealedDesign;
+		console.log({signhash, designHash, type});
 	}
 }

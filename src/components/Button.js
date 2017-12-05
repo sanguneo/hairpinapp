@@ -9,17 +9,18 @@ class Button extends Component {
 		style: PropTypes.object,
 		imgStyle: PropTypes.object,
 		labelStyle: PropTypes.object,
-		label: PropTypes.string.isRequired,
+		label: PropTypes.string,
 		onPress: PropTypes.func.isRequired,
 		source: PropTypes.any,
 	};
 	static defaultProps = {
 		touchableType: 0,
 		style: {
-			width: 300,
+			flex: 1,
 			height: 40
 		},
-		source: null
+		source: null,
+		label: null
 	};
 
 	constructor(props) {
@@ -52,7 +53,7 @@ class Button extends Component {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
+
 		borderRadius: 5,
 	},
 	touchable: {
@@ -63,6 +64,7 @@ const styles = StyleSheet.create({
 	image: {
 		width: 30,
 		height: 30,
+		marginVertical: 5,
 		tintColor: '#fff'
 	},
 	label: {

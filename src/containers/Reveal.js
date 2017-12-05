@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Text, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 
 import {connect} from 'react-redux';
 import * as designActions from '../redux/action/designs';
@@ -15,6 +15,12 @@ import recipe from '../assets/img/icon/recipe.png';
 import comment from '../assets/img/icon/comment.png';
 import cut from '../assets/img/icon/cut.png';
 import remove from '../assets/img/icon/remove.png';
+import earth from '../assets/img/icon/earth.png';
+import follower from '../assets/img/icon/follower.png';
+import privates from '../assets/img/icon/private.png';
+import upload from '../assets/img/icon/upload.png';
+
+const uploadIcons = [upload, privates, null, follower, null, null, earth];
 
 class Reveal extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -61,11 +67,33 @@ class Reveal extends Component {
 		});
 	}
 
+	upload() {
+		const {designUploaded} = this.props.designs.revealedDesign;
+		if(designUploaded === 1) {
+
+		} else if(designUploaded === 3) {
+
+		} else if(designUploaded === 7) {
+
+		}
+
+		const publish = () => {
+			Alert.alert('업로드 공개유형을 선택하세요','디자인을 게시하고 공유하세요!\n취소하려면 창 바깥쪽을 터치하세요.',
+				[	{text: '비공개', onPress:()=>this.props.dispatch(designActions.uploadDesign((1)))},
+					{text: '팔로잉', onPress:()=>this.props.dispatch(designActions.uploadDesign((3)))},
+					{text: '전체공개', onPress:()=>this.props.dispatch(designActions.uploadDesign((7)))}]);
+		}
+
+		if(designUploaded !== 0)
+			Alert.alert('이미 게시 되어있습니다','공개유형을 변경하시겠습니까?', [ {text: '확인', onPress:()=> publish()}, {text: '취소'}]);
+	}
+
 	openLightbox(referenceCase) {
 		this[referenceCase]._open();
 	}
 
 	render() {
+		let uploadIcon = uploadIcons[this.props.designs.revealedDesign.designUploaded];
 		return (
 			<View style={styles.wrapper}>
 				<ScrollView style={styles.container} >
@@ -91,14 +119,16 @@ class Reveal extends Component {
 					</FormWrapper>
 					<View style={styles.btns}>{this.props.designs.revealedDesign.designRecipe ?
 						<Button label="레시피" onPress={()=> this.openLightbox('recipe')}
-								buttonColor="#ff412b" source={recipe} style={{flex: 1, marginHorizontal: 10}}/>
+								buttonColor="#ff412b" source={recipe} style={{flex: 1, marginLeft: 10, marginRight: 5}}/>
 						: null}{this.props.designs.revealedDesign.designComment ?
 						<Button label="코멘트" onPress={()=> this.openLightbox('comment')}
-								buttonColor="#3692d9" source={comment} style={{flex: 1, marginHorizontal: 10}}/>: null}
+								buttonColor="#3692d9" source={comment} style={{flex: 1, marginLeft: 5, marginRight: 10}}/>: null}
 					</View>
 					<View style={[styles.btns, {marginBottom: 20}]}>
 						<Button label="수정하기" onPress={()=> this.edit()}
-								buttonColor="#bd6592" source={cut} style={{flex: 1, marginHorizontal: 10}}/>
+								buttonColor="#bd6592" source={cut} style={{flex: 1, marginLeft: 10, marginRight: 5}}/>
+						<Button onPress={()=> this.upload()}
+								buttonColor="#60BF30" source={uploadIcon} style={{width: 40, marginLeft: 5, marginRight: 10}}/>
 					</View>
 				</ScrollView>
 				<Lightbox title={'레시피'} ref={ref => this.recipe = ref}>

@@ -114,7 +114,7 @@ class Join extends Component {
 									  onChange={(e) => this.handleInputChange('joinPasswordChk', e)} />
 					</FormWrapper>
 					<View style={styles.btns}>
-						<Button label="회원가입" onPress={()=> {this.submit()}} buttonColor="#3692d9"/>
+						<Button label="회원가입" onPress={()=> {this.submit()}} buttonColor="#3692d9" style={{width: 300}}/>
 					</View>
 				</ScrollView>
 			</View>

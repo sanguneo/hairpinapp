@@ -54,9 +54,8 @@ export function login(userinfo, callback=(()=>{})) {
 						RNFS.downloadFile({
 							fromUrl: `http://${hairpinserver}/upload/profiles/${response.data.signhash}`,
 							toFile: pPath
-						}).promise.then((res) => {
-							loginOK();
-						}).catch(e => {
+						}).promise.then((res) => loginOK()
+						).catch(e => {
 							console.error('error', e);
 						});
 					}
@@ -133,13 +132,12 @@ export function joinAsync(userinfo, callback) {
 					userinfo.joinProfile.uri.replace('file://', ''),
 					RNFS.PlatformDependPath + '/_profiles_/' + response.data.signhash + '.scalb'
 				).then(() => {
-					Alert.alert('','회원가입이 완료되었습니다.',
-						[{text: '확인', onPress: () => {callback()}}]);
+					Alert.alert('회원가입이 완료되었습니다',null, [{text: '확인', onPress: () => {callback()}}]);
 				}).catch(e => console.error('error', e));
 			} else if (response.data.message == 'emailexist') {
-				Alert.alert('사용중인 이메일 입니다.');
+				Alert.alert('사용중인 이메일 입니다');
 			} else {
-				Alert.alert('입력값을 확인해주세요!');
+				Alert.alert('입력값을 다시 확인하세요!');
 			}
 		}).catch(e => {
 			console.log('error', e);
@@ -173,15 +171,11 @@ export function modifyAsync(userinfo, callback) {
 					userinfo.modifyProfile.uri.replace('file://', ''),
 					RNFS.PlatformDependPath + '/_profiles_/' + response.data.signhash + '.scalb'
 				).then(() => {
-					RNFS.unlink(
-						userinfo.modifyProfile.uri.replace('file://', '')
-					).catch(e => {});
+					RNFS.unlink( userinfo.modifyProfile.uri.replace('file://', '') ).catch(e => {});
 					dispatch(loginDone({ name: response.data.nickname, refresh: Math.random() * 10000}));
-					Alert.alert('','회원정보 수정이 완료되었습니다.',
+					Alert.alert('회원정보 수정이 완료되었습니다',null,
 						[{text: '확인', onPress: () => {callback()}}]);
 				}).catch(e => console.error('error', e));
-			} else if (response.data.message == 'emailexist') {
-				Alert.alert('사용중인 이메일 입니다.');
 			} else {
 				Alert.alert('입력값을 확인해주세요!');
 			}
