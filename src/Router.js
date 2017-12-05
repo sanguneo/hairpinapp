@@ -8,6 +8,7 @@ import Join from './containers/Join';
 import Modify from './containers/Modify';
 
 import MainTotal from './containers/MainTotal';
+import Tags from './containers/Tags';
 import Write from './containers/Write';
 import Edit from './containers/Edit';
 import Reveal from './containers/Reveal';
@@ -21,6 +22,7 @@ import FooterAdBar from "./containers/FooterAdBar";
 const StackNavigation = StackNavigator({
 	Main			:	{ screen: MainTotal		},
 	Total			:	{ screen: MainTotal 	},
+	Tags			:	{ screen: Tags 			},
 	Write			:	{ screen: Write 		},
 	Edit			:	{ screen: Edit			},
 	Reveal			:	{ screen: Reveal 		},

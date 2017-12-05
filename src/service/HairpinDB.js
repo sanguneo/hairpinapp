@@ -44,8 +44,21 @@ class HairpinDBClass {
 		});
 	}
 
-	selectTagname(callback) {
-		this.executeQuery(`SELECT name as tagname FROM 'ca_tag' GROUP BY tagname;`, (callback || (() => {})));
+	getTagnames(callback, signhash) {
+		callback([
+			{tagname: '상구너'},
+			{tagname: '구나'},
+			{tagname: 'omg'},
+			{tagname: '와우'},
+			{tagname: 'zzzz'},
+			{tagname: 'asfasf'},
+			{tagname: 7},
+			{tagname: 8},
+		]);
+		// const whereCondition = (signhash && signhash!== '') && `WHERE signhash='${signhash}' `;
+		// this.executeQuery(`SELECT name as tagname FROM 'ca_tag' ${whereCondition}GROUP BY tagname;`, (results) => {
+		// 	callback(results.rows.raw());
+		// })
 	}
 
 	getDesigns(callback, signhash, limit=false, offset=false) {

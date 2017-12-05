@@ -29,6 +29,10 @@ export function getOneDesign(revealedDesign) {
 	return {type: types.GETONEDESIGN, revealedDesign};
 }
 
+export function getTags(designTagList) {
+	return {type: types.REFRESHTAGS, designTagList};
+}
+
 export function getDesignsAsync(limit=false, offset=false) {
 	return async (dispatch, getState) => {
 		const {signhash} = getState().user;
@@ -190,6 +194,15 @@ export function uploadDesign(type=0,callback=(()=>{})) {
 	return async (dispatch, getState) => {
 		const {signhash} = getState().user;
 		const {designHash} = getState().designs.revealedDesign;
-		console.log({signhash, designHash, type});
 	}
 }
+
+export function getTagsAsync() {
+	return async (dispatch, getState) => {
+		const {signhash} = getState().user;
+		HairpinDB.getTagnames((designTagList)=> {
+			dispatch(getTags(designTagList));
+		}, signhash);
+	}
+}
+

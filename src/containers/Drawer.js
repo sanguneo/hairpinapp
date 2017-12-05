@@ -37,7 +37,7 @@ class Drawer extends Component {
 					<Image style={styles.drawerBtnItemImage} source={total} />
 					<Text style={styles.drawerBtnItemLabel}>전체보기</Text>
 				</TouchableOpacity>
-				<TouchableOpacity style={styles.drawerBtnItem}>
+				<TouchableOpacity style={styles.drawerBtnItem} onPress={() => this.goContainer('Tags')}>
 					<Image style={styles.drawerBtnItemImage} source={tags} />
 					<Text style={styles.drawerBtnItemLabel}>태그보기</Text>
 				</TouchableOpacity>

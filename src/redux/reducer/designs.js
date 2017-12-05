@@ -5,6 +5,7 @@ import * as types from '../actionType/designs';
 const initialState = Immutable({
 	refresh: Date.now(),
 	designTotalList: [],
+	designTagList: [],
 	revealedDesign: {
 		designHash: null,
 		designRegdate: null,
@@ -39,13 +40,14 @@ export default function designs(state = initialState, action = {}) {
 				revealedDesign: action.revealedDesign
 			});
 		case types.SETPHOTO :
-			console.log(Object.assign({}, state.revealedDesign, {
-				...action.photoObj
-			}));
 			return Object.assign({}, state, {
 				revealedDesign: Object.assign({}, state.revealedDesign, {
 					...action.photoObj
 				})
+			});
+		case types.REFRESHTAGS :
+			return Object.assign({}, state, {
+				designTagList: action.designTagList
 			});
 		default:
 			return state;
