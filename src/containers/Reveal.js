@@ -68,23 +68,14 @@ class Reveal extends Component {
 	}
 
 	upload() {
-		const {designUploaded} = this.props.designs.revealedDesign;
-		if(designUploaded === 1) {
-
-		} else if(designUploaded === 3) {
-
-		} else if(designUploaded === 7) {
-
-		}
-
-		const publish = () => {
+		const publish = () =>
 			Alert.alert('업로드 공개유형을 선택하세요','디자인을 게시하고 공유하세요!\n취소하려면 창 바깥쪽을 터치하세요.',
 				[	{text: '비공개', onPress:()=>this.props.dispatch(designActions.uploadDesign((1)))},
 					{text: '팔로잉', onPress:()=>this.props.dispatch(designActions.uploadDesign((3)))},
 					{text: '전체공개', onPress:()=>this.props.dispatch(designActions.uploadDesign((7)))}]);
-		}
 
-		if(designUploaded !== 0)
+
+		if(this.props.designs.revealedDesign.designUploaded !== 0)
 			Alert.alert('이미 게시 되어있습니다','공개유형을 변경하시겠습니까?', [ {text: '확인', onPress:()=> publish()}, {text: '취소'}]);
 	}
 
