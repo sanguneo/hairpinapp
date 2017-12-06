@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, ScrollView, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import Lightbox from '../components/Lightbox';
+import Loading from '../components/Loading';
 import axios from 'axios';
 import Formatter from '../utils/Formatter';
 
@@ -8,16 +9,7 @@ import {connect} from 'react-redux';
 
 import close from '../assets/img/icon/close.png';
 
-const {width, height, deviceWidth, deviceHeight, scale} = (function() {
-	let i = Dimensions.get('window');
-	return {
-		width: i.width,
-		height: i.height,
-		deviceWidth: i.width * i.scale,
-		deviceHeight: i.height * i.scale,
-		scale: i.scale
-	};
-})();
+const {width, height} = Dimensions.get('window')
 
 class Notice extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -47,7 +39,9 @@ class Notice extends Component {
 			}
 		).then(response => {
 			if (response.data.code === 320){
-				this.setState({noticeList: response.data.notice});
+				this.setState({noticeList: response.data.notice},()=> {
+					this.loadR.hide();
+				});
 			} else {
 			}
 		}).catch(e => {
@@ -56,6 +50,7 @@ class Notice extends Component {
 	}
 
 	fetchOneNotice(id) {
+		this.loadR.show();
 		axios.get(
 			`http://hpserver.sanguneo.com/notice/${id}`,
 			{
@@ -67,6 +62,7 @@ class Notice extends Component {
 		).then(response => {
 			if (response.data.code === 340){
 				this.setState({noticeItem: response.data.notice}, ()=> {
+					this.loadR.hide();
 					this.openLightbox();
 				});
 			} else {
@@ -82,6 +78,8 @@ class Notice extends Component {
 
 	componentWillMount() {
 		this.fetchNoticeList()
+	}
+	componentDidMount() {
 	}
 
 	render() {
@@ -110,6 +108,7 @@ class Notice extends Component {
 						</Text>
 					</ScrollView>
 				</Lightbox>
+				<Loading  ref={ref => this.loadR = ref}/>
 			</View>
 		);
 	}
@@ -148,7 +147,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		fontSize: 12,
 		textAlign: 'right'
-	}
+	},
 });
 
 

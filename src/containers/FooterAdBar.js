@@ -6,7 +6,7 @@ import AdBar from "../components/AdBar";
 import close from "../assets/img/icon/close.png"
 
 class FooterAdBar extends React.Component {
-	state = { show: false }
+	state = { show: true }
 
 	componentWillMount() {
 		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', ()=> {this.setState({show: false})});
