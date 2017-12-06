@@ -17,9 +17,9 @@ class Drawer extends Component {
 		super(props);
 		this.goContainer = this.goContainer.bind(this);
 	}
-	goContainer(containerName) {
+	goContainer(containerName, params) {
 		if(this.props.user.token && this.props.user.token !== '') {
-			return typeof containerName == 'string' && this.props.navigation.navigate(containerName);
+			return typeof containerName == 'string' && this.props.navigation.navigate(containerName, params);
 		}
 		Alert.alert('', '로그인이 되어있지 않습니다.\n로그인페이지로 이동합니다.',
 			[{text: '확인', onPress: () => {this.props.navigation.navigate('Login')}}]);
@@ -33,11 +33,11 @@ class Drawer extends Component {
 					<Image style={styles.profile} source={profileImage} />
 					<Text style={styles.name}>{this.props.user.name||'로그인'}</Text>
 				</TouchableOpacity>
-				<TouchableOpacity style={styles.drawerBtnItem} onPress={() => this.goContainer('Total')}>
+				<TouchableOpacity style={styles.drawerBtnItem} onPress={() => this.goContainer('TotalList')}>
 					<Image style={styles.drawerBtnItemImage} source={total} />
 					<Text style={styles.drawerBtnItemLabel}>전체보기</Text>
 				</TouchableOpacity>
-				<TouchableOpacity style={styles.drawerBtnItem} onPress={() => this.goContainer('Tags')}>
+				<TouchableOpacity style={styles.drawerBtnItem} onPress={() => this.goContainer('Tagnames', {onChange: (()=>{})})}>
 					<Image style={styles.drawerBtnItemImage} source={tags} />
 					<Text style={styles.drawerBtnItemLabel}>태그보기</Text>
 				</TouchableOpacity>
@@ -45,7 +45,8 @@ class Drawer extends Component {
 					<Image style={styles.drawerBtnItemImage} source={subscribe} />
 					<Text style={styles.drawerBtnItemLabel}>작성하기</Text>
 				</TouchableOpacity>
-				<TouchableOpacity style={[styles.drawerBtnItem, styles.drawerBtnAbsolute, {bottom: 50}]}>
+				<TouchableOpacity style={[styles.drawerBtnItem, styles.drawerBtnAbsolute, {bottom: 50}]}
+								  onPress={() => this.goContainer('Notice')}>
 					<Image style={styles.drawerBtnItemImage} source={notice} />
 					<Text style={styles.drawerBtnItemLabel}>공지사항</Text>
 				</TouchableOpacity>

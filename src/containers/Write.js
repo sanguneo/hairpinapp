@@ -111,7 +111,7 @@ class Write extends Component {
 	render() {
 		return (
 			<View style={styles.wrapper}>
-				<ScrollView style={styles.container} ref={ref=> this.ScrollView = ref} onScroll={event => this._whereLine(event)}  keyboardShouldPersistTaps='handled'>
+				<ScrollView style={styles.container} ref={ref=> this.ScrollView = ref} onScroll={event => this._whereLine(event)} keyboardShouldPersistTaps='handled'>
 					<View style={styles.imgView} ref={ref=> this.imgView = ref} collapsable={false}>
 						<TouchableOpacity onPress={()=> {this.setDesignImage('left')}}>
 							<Image source={this.state.designLeftImage} style={styles.img} />

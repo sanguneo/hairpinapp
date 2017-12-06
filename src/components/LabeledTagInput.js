@@ -9,6 +9,7 @@ class LabeledTagInput extends Component {
 		placeholder: PropTypes.string,
 		value: PropTypes.any,
 		onChange: PropTypes.func,
+		onPressTag: PropTypes.any,
 		secureTextEntry: PropTypes.bool,
 		style: PropTypes.object,
 		labelStyle: PropTypes.object,
@@ -28,13 +29,14 @@ class LabeledTagInput extends Component {
 		inputStyle: {height: 40},
 		placeholderTextColor: '#bbb',
 		keyboardType: 'default',
+		onPressTag: false,
 		readOnly: false
 	};
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			tags: props.value,
+			value: props.value,
 			label: props.label,
 			placeholder: props.placeholder,
 		}
@@ -62,15 +64,17 @@ class LabeledTagInput extends Component {
 			<KeyboardAvoidingView style={[styles.wrapper, this.props.style]}>
 				<Text style={[styles.label, this.props.labelStyle]}>{this.state.label}</Text>
 				<View style={styles.input}>
-					<TagInput value={this.state.tags}
+					<TagInput value={this.props.value}
 						onChange={this.onChangeTags}
 						tagTextColor="white"
+						tagColor="#bbb"
 						inputProps={{
 							keyboardType: 'default',
 							placeholder: this.props.placeholder,
 							autoFocus: false
 						}}
 						readOnly={this.props.readOnly}
+						onPressTag={this.props.onPressTag}
 						parseOnBlur={true}
 						numberOfLines={99}
 						ref={'tag'}

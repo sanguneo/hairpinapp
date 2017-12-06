@@ -67,6 +67,10 @@ class Reveal extends Component {
 		});
 	}
 
+	goTag(tagname) {
+		this.props.navigation.navigate('TagList', {tagname})
+	}
+
 	upload() {
 		if(this.props.designs.revealedDesign.designUploaded !== 0)
 			Alert.alert('이미 게시 되어있습니다','공개유형을 변경하시겠습니까?', [
@@ -105,6 +109,7 @@ class Reveal extends Component {
 									  value={this.props.designs.revealedDesign.designTitle} />
 						<Hr lineColor="#878787" />
 						<LabeledTagInput label="테그" placeholder="테그없음" readOnly={true}
+										 onPressTag={(tagname)=>this.goTag(tagname)}
 										 value={this.props.designs.revealedDesign.designTag}/>
 					</FormWrapper>
 					<View style={styles.btns}>{this.props.designs.revealedDesign.designRecipe ?

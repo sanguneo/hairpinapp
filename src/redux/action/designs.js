@@ -25,12 +25,16 @@ export function getDesigns(designTotalList){
 	return {type: types.DESIGNLISTUPDATE, designTotalList};
 }
 
+export function getDesignsByTag(designTagList){
+	return {type: types.DESIGNUPDATEBYTAG, designTagList};
+}
+
 export function getOneDesign(revealedDesign) {
 	return {type: types.GETONEDESIGN, revealedDesign};
 }
 
-export function getTags(designTagList) {
-	return {type: types.REFRESHTAGS, designTagList};
+export function getTagnames(designTagnameList) {
+	return {type: types.REFRESHTAGS, designTagnameList};
 }
 
 export function getDesignsAsync(limit=false, offset=false) {
@@ -39,6 +43,15 @@ export function getDesignsAsync(limit=false, offset=false) {
 		HairpinDB.getDesigns((designTotalList) => {
 			dispatch(getDesigns(designTotalList));
 		}, signhash, limit, offset);
+	}
+}
+
+export function getDesignsByTagAsync(tagname, limit=false, offset=false) {
+	return async (dispatch, getState) => {
+		const {signhash} = getState().user;
+		HairpinDB.getDesignsByTag((designTagList) => {
+			dispatch(getDesignsByTag(designTagList));
+		}, signhash, tagname, limit, offset);
 	}
 }
 
@@ -99,7 +112,8 @@ export function saveDesign(designinfo, callback) {
 
 		HairpinDB.insertDesign(	signhash, designinfo.designHash, designinfo.designRegdate,
 								designinfo.designTitle, designinfo.designRecipe, designinfo.designComment);
-		HairpinDB.insertTag(designinfo.signhash, designinfo.designHash, designinfo.designTag);
+		HairpinDB.insertTag(signhash, designinfo.designHash,
+			designinfo.designTag.reduce(function(a,b){if(a.indexOf(b)<0)a.push(b);return a;},[]));
 		
 		resizeBatch('left',() => resizeBatch('right', () => makeThumb(()=>{
 			callback(`${RNFS.PlatformDependPath}/_thumb_/${signhash}_${designinfo.designHash}.scalb`);
@@ -142,13 +156,15 @@ export function resaveDesign(designinfo, callback) {
 			RNFS.moveFile(designinfo.designMergedImage.replace('file://', ''), `${originalPath}.scalb`).then(() => {
 				ImageResizer.createResizedImage(`${originalPath}.scalb`, 100, 100, 'JPEG', 100, 0).then(({uri}) => {
 					const renamed = `${RNFS.PlatformDependPath}/_thumb_/${signhash}_${designinfo.designHash}.scalb`;
-					RNFS.moveFile(uri.replace('file://', ''), renamed).then(() => cb());
+					RNFS.moveFile(uri.replace('file://', ''), renamed);
 				}).catch((err) => console.log(err));
 			});
+			cb();
 		}
 		HairpinDB.updateDesign(	signhash, designinfo.designHash,
 								designinfo.designTitle, designinfo.designRecipe, designinfo.designComment);
-		HairpinDB.insertTag(designinfo.signhash, designinfo.designHash, designinfo.designTag);
+		HairpinDB.insertTag( signhash, designinfo.designHash,
+			designinfo.designTag.reduce(function(a,b){if(a.indexOf(b)<0)a.push(b);return a;},[]));
 
 		resizeBatch('left',() => resizeBatch('right', () => makeThumb(()=>{
 			callback(`${RNFS.PlatformDependPath}/_thumb_/${signhash}_${designinfo.designHash}.scalb`);
@@ -197,11 +213,11 @@ export function uploadDesign(type=0,callback=(()=>{})) {
 	}
 }
 
-export function getTagsAsync() {
+export function getTagnamesAsync() {
 	return async (dispatch, getState) => {
 		const {signhash} = getState().user;
-		HairpinDB.getTagnames((designTagList)=> {
-			dispatch(getTags(designTagList));
+		HairpinDB.getTagnames((designTagnameList)=> {
+			dispatch(getTagnames(designTagnameList));
 		}, signhash);
 	}
 }

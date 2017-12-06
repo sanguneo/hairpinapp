@@ -7,8 +7,6 @@ import * as designActions from '../redux/action/designs';
 import RNFS from '../service/RNFS_wrapper';
 import Formatter from '../utils/Formatter';
 
-
-const logo = require('../assets/img/logo.png');
 const menu = require('../assets/img/icon/menu.png');
 
 const {width, height, deviceWidth, deviceHeight, scale} = (function() {
@@ -22,7 +20,7 @@ const {width, height, deviceWidth, deviceHeight, scale} = (function() {
 	};
 })();
 
-class MainScreen extends Component {
+class TagList extends Component {
 	static navigationOptions = ({ navigation }) => ({
 		headerTitleStyle :{alignSelf: 'center', color: '#fff', fontWeight: 'normal'},
 		headerLeft: (navigation.state.routeName&& navigation.state.routeName === 'Main' &&
@@ -30,9 +28,7 @@ class MainScreen extends Component {
 				<Image source={menu} style={{width: 32, height: 32, marginHorizontal: 8, tintColor: '#fff'}}/>
 			</TouchableOpacity>
 		),
-		headerTitle: (navigation.state.routeName&& navigation.state.routeName === 'Main' ?
-			<Image source={logo} style={[{width: 123, height: 40}, Platform.OS === 'android' ? {alignSelf:'center'} : {}]}/> : '전체보기'
-		),
+		headerTitle: `#${navigation.state.params.tagname}`,
 		headerRight: (
 			<View style={{width: 32, height: 32, marginHorizontal: 8}}/>
 		),
@@ -43,9 +39,8 @@ class MainScreen extends Component {
 		this.goDesign = this.goDesign.bind(this);
 	}
 
-	componentDidMount() {
-		if(!this.props.user.signhash || this.props.user.signhash === '') return;
-		this.props.dispatch(designActions.getDesignsAsync());
+	componentWillMount() {
+		this.props.dispatch(designActions.getDesignsByTagAsync(this.props.navigation.state.params.tagname));
 	}
 
 	goDesign(designHash, screentitle) {
@@ -58,7 +53,7 @@ class MainScreen extends Component {
 		return (
 			<View style={styles.wrapper}>
 				<FlatList initialNumToRender={20} numColumns={this.numColumns} contentContainerStyle={styles.container}
-						  data={this.props.designs.designTotalList} keyExtractor={item => item.idx}
+						  data={this.props.designs.designTagList} keyExtractor={item => item.idx}
 						  renderItem={({item}) => {
 							  const title = item.title ? item.title : item.reg_date
 								  									? Formatter.dateFormatter(item.reg_date) : 'noname';
@@ -94,5 +89,5 @@ function mapStateToProps(state) {
 	};
 }
 
-export default connect(mapStateToProps)(MainScreen);
+export default connect(mapStateToProps)(TagList);
 

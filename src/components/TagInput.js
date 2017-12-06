@@ -177,7 +177,8 @@ class TagInput extends Component {
 
 		if (results && results.length > 0) {
 			this.setState({text: ''});
-			this.props.onChange([...new Set([...value, ...results])]);
+			// let res = [...value, ...results].reduce(function(a,b){if(a.indexOf(b)<0)a.push(b);return a;},[])
+			this.props.onChange([...new Set([...value, ...results].reduce(function(a,b){if(a.indexOf(b)<0)a.push(b);return a;},[]))]);
 		}
 	};
 
@@ -222,7 +223,7 @@ class TagInput extends Component {
 	};
 
 	_renderTag = (tag, index) => {
-		const {tagColor, tagTextColor} = this.props;
+		const {tagColor, tagTextColor, onPressTag, readOnly} = this.props;
 		return (
 			<TouchableOpacity
 				key={index}
@@ -232,14 +233,14 @@ class TagInput extends Component {
 					{backgroundColor: tagColor},
 					this.props.tagContainerStyle
 				]}
-				onPress={() => this.removeIndex(index)}>
+				onPress={() => (onPressTag ? onPressTag(this._getLabelValue(tag)) : this.removeIndex(index))}>
 				<Text
 					style={[
 						styles.tagText,
 						{color: tagTextColor},
 						this.props.tagTextStyle
 					]}>
-					{'#' + this._getLabelValue(tag)}&nbsp;&times;
+					{'#' + this._getLabelValue(tag)}{!readOnly ? ' ×' : ''}
 				</Text>
 			</TouchableOpacity>
 		);
@@ -298,11 +299,8 @@ class TagInput extends Component {
 									onSubmitEditing={this.parseTags}
 									{...inputProps}
 								/>
-							</View> : <TextInput
-								value={text}
-								style={[styles.textInputNone, {color: inputColor}]}
-								{...inputProps}
-							/>
+							</View> : ((value.length ===0) ? <TextInput value={text}
+								style={[styles.textInputNone, {color: inputColor}]} {...inputProps} /> : null)
 							}
 						</View>
 					</View>
@@ -323,7 +321,8 @@ const styles = StyleSheet.create({
 	tagInputContainer: {
 		flex: 1,
 		flexDirection: 'row',
-		flexWrap: 'wrap'
+		flexWrap: 'wrap',
+		paddingBottom: 5
 	},
 	tagInputContainerScroll: {
 		flex: 1,
@@ -333,7 +332,7 @@ const styles = StyleSheet.create({
 		marginLeft: 3,
 		height: 40,
 		fontSize: 15,
-		padding: 0
+		padding: 0,
 	},
 	textInputNone: {
 		flex: 1,
@@ -353,7 +352,8 @@ const styles = StyleSheet.create({
 	},
 	tagText: {
 		padding: 0,
-		margin: 0
+		margin: 0,
+		fontSize: 16,
 	}
 });
 

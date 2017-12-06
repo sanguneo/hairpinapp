@@ -7,12 +7,16 @@ import Login from './containers/Login';
 import Join from './containers/Join';
 import Modify from './containers/Modify';
 
-import MainTotal from './containers/MainTotal';
-import Tags from './containers/Tags';
+import TotalList from './containers/TotalList';
+import Tagnames from './containers/Tagnames';
+import TagList from './containers/TagList';
 import Write from './containers/Write';
 import Edit from './containers/Edit';
 import Reveal from './containers/Reveal';
 import ImgSourceView from './containers/ImgSourceView';
+
+import Notice from './containers/Notice';
+import NoticeOne from './containers/NoticeOne';
 
 
 // Advertise (Must located under other components)
@@ -20,13 +24,17 @@ import FooterAdBar from "./containers/FooterAdBar";
 
 
 const StackNavigation = StackNavigator({
-	Main			:	{ screen: MainTotal		},
-	Total			:	{ screen: MainTotal 	},
-	Tags			:	{ screen: Tags 			},
+	Main			:	{ screen: TotalList		},
+	TotalList		:	{ screen: TotalList 	},
+	Tagnames		:	{ screen: Tagnames 		},
+	TagList			:	{ screen: TagList 		},
 	Write			:	{ screen: Write 		},
 	Edit			:	{ screen: Edit			},
 	Reveal			:	{ screen: Reveal 		},
 	ImgSourceView	:	{ screen: ImgSourceView	},
+
+	Notice			:	{ screen: Notice		},
+	NoticeOne		:	{ screen: NoticeOne		},
 
 	Login			:	{ screen: Login 		},
 	Join			:	{ screen: Join 			},

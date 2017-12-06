@@ -6,6 +6,7 @@ const initialState = Immutable({
 	refresh: Date.now(),
 	designTotalList: [],
 	designTagList: [],
+	designTagnameList: [],
 	revealedDesign: {
 		designHash: null,
 		designRegdate: null,
@@ -36,8 +37,11 @@ export default function designs(state = initialState, action = {}) {
 				designTotalList: [action.design, ...state.designTotalList]
 			});
 		case types.GETONEDESIGN :
+			const revealedDesign = action.revealedDesign;
+			revealedDesign.designTag =
+				revealedDesign.designTag.reduce(function(a,b){if(a.indexOf(b)<0)a.push(b);return a;},[]);
 			return Object.assign({}, state, {
-				revealedDesign: action.revealedDesign
+				revealedDesign
 			});
 		case types.SETPHOTO :
 			return Object.assign({}, state, {
@@ -45,9 +49,13 @@ export default function designs(state = initialState, action = {}) {
 					...action.photoObj
 				})
 			});
-		case types.REFRESHTAGS :
+		case types.DESIGNUPDATEBYTAG :
 			return Object.assign({}, state, {
 				designTagList: action.designTagList
+			});
+		case types.REFRESHTAGS :
+			return Object.assign({}, state, {
+				designTagnameList: action.designTagnameList
 			});
 		default:
 			return state;

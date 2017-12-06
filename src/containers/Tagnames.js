@@ -3,10 +3,7 @@ import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 
 import RNFS from '../service/RNFS_wrapper';
 
 import {connect} from 'react-redux';
-import * as userActions from '../redux/action/user';
 import * as designActions from '../redux/action/designs';
-
-import profile from '../assets/img/profile.png';
 
 
 class Tags extends Component {
@@ -14,6 +11,7 @@ class Tags extends Component {
 		headerTitle: (
 			<View style={styles.tagSearchView}>
 				<TextInput style={styles.tagSearch} placeholder='검색어를 입력하세요'
+						   onChange={navigation.state.params.onChange}
 						   placeholderTextColor="#ddd"
 						   underlineColorAndroid={'transparent'} underlineColorIos={'transparent'}/>
 			</View>
@@ -26,22 +24,30 @@ class Tags extends Component {
 
 	constructor(props) {
 		super(props);
+		this.props.navigation.setParams({
+			onChange: this.handleInputChange.bind(this)
+		});
 	}
 
-	handleInputChange(label, event) {
-		this.setState({[label]: event.nativeEvent.text});
+	handleInputChange(event) {
+		this.setState({query: event.nativeEvent.text});
+	}
+
+	goTag(tagname) {
+		this.props.navigation.navigate('TagList', {tagname})
 	}
 
 	componentWillMount() {
-		this.props.dispatch(designActions.getTagsAsync());
+		this.props.dispatch(designActions.getTagnamesAsync());
 	}
 
 	render() {
-		const designTagComponents = this.props.designs.designTagList.filter((item) => String(item.tagname).includes(this.state.query)).map((item, idx) =>
-			(<TouchableOpacity key={idx} onPress={()=> {console.log(item.tagname)}}>
+		const designTagComponents = this.props.designs.designTagnameList.filter(
+			(item) =>String(item.tagname).includes(this.state.query)).map((item, idx) =>(
+			<TouchableOpacity key={idx} onPress={()=>this.goTag(item.tagname)}>
 				<Text style={styles.tag}>#{item.tagname}</Text>
-			</TouchableOpacity>)
-		);
+			</TouchableOpacity>
+		));
 		return (
 			<View style={styles.wrapper}>
 				<ScrollView style={styles.wrapper}>
@@ -68,7 +74,7 @@ const styles = StyleSheet.create({
 		height: 40,
 		paddingHorizontal: 10,
 		margin: 5,
-		backgroundColor: '#888',
+		backgroundColor: '#bbb',
 		borderRadius: 5,
 		elevation: 3,
 		color: '#ffffff',

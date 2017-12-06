@@ -31,34 +31,24 @@ class HairpinDBClass {
 		this.executeQuery(query);
 	}
 
-	insertTag(signhash, photohash, iTags) {
-		const tagquery = `DELETE FROM 'ca_tag' WHERE 'photohash'='${photohash}' AND 'signhash'='${signhash}';`;
-		const tagreturn = (tag) => `INSERT INTO 'ca_tag'('name','photohash','signhash') VALUES ('${tag}','${photohash}','${signhash}');`;
+	insertTag(signhash, photohash, tagnames) {
+		let tagquery = "DELETE FROM `ca_tag` WHERE `photohash`='"+photohash+"' AND `signhash`='"+signhash+"';";
+		const tagreturn = (tag) => "INSERT INTO `ca_tag`(`signhash`,`photohash`,`name`) VALUES ('"+signhash+"','"+photohash+"','"+tag+"');";
 		// let tagnamereturn = (tag) => `INSERT INTO 'ca_tagname'('tagname') SELECT '${tag}' WHERE NOT EXISTS(SELECT 1 FROM 'ca_tagname' WHERE 'tagname' = '${tag}');`;
 
-		this.executeQuery(tagquery);
-		
-		iTags.forEach((tag) => {
-			this.executeQuery(tagreturn(tag));
-			// this.executeQuery(tagnamereturn(tag));
+		this.executeQuery(tagquery, ()=> {
+			tagnames.reduce(function(a,b){if(a.indexOf(b)<0)a.push(b);return a;},[]).forEach((tagname) => {
+				this.executeQuery(tagreturn(tagname));
+				// this.executeQuery(tagnamereturn(tag));
+			});
 		});
 	}
 
 	getTagnames(callback, signhash) {
-		callback([
-			{tagname: '상구너'},
-			{tagname: '구나'},
-			{tagname: 'omg'},
-			{tagname: '와우'},
-			{tagname: 'zzzz'},
-			{tagname: 'asfasf'},
-			{tagname: 7},
-			{tagname: 8},
-		]);
-		// const whereCondition = (signhash && signhash!== '') && `WHERE signhash='${signhash}' `;
-		// this.executeQuery(`SELECT name as tagname FROM 'ca_tag' ${whereCondition}GROUP BY tagname;`, (results) => {
-		// 	callback(results.rows.raw());
-		// })
+		const whereCondition = (signhash && signhash!== '') && `WHERE signhash='${signhash}' `;
+		this.executeQuery(`SELECT name as tagname FROM 'ca_tag' ${whereCondition}GROUP BY tagname;`, (results) => {
+			callback(results.rows.raw());
+		})
 	}
 
 	getDesigns(callback, signhash, limit=false, offset=false) {
@@ -67,6 +57,16 @@ class HairpinDBClass {
 			callback(results.rows.raw());
 		});
 	}
+
+	getDesignsByTag(callback, signhash, tagname, limit=false, offset=false) {
+		const query = 	`SELECT p.idx, p.photohash, p.reg_date, p.title, p.recipe, p.comment, p.signhash FROM ca_photo as p `+
+			`LEFT JOIN ca_tag as t ON p.photohash = t.photohash WHERE ` +
+			`t.signhash='${signhash}' AND t.name='${tagname}' ORDER BY p.idx DESC;`;
+		this.executeQuery(query, (results) => {
+			callback(results.rows.raw());
+		});
+	}
+
 	getOneDesign(callback, designHash, signhash) {
 		const query = `SELECT * FROM ca_photo WHERE signhash='${signhash}'AND photohash='${designHash}';`;
 		const tagquery = `SELECT * FROM ca_tag WHERE signhash='${signhash}'AND photohash='${designHash}';`;
