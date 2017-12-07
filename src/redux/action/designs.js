@@ -112,8 +112,7 @@ export function saveDesign(designinfo, callback) {
 
 		HairpinDB.insertDesign(	signhash, designinfo.designHash, designinfo.designRegdate,
 								designinfo.designTitle, designinfo.designRecipe, designinfo.designComment);
-		HairpinDB.insertTag(signhash, designinfo.designHash,
-			designinfo.designTag.reduce(function(a,b){if(a.indexOf(b)<0)a.push(b);return a;},[]));
+		HairpinDB.insertTag(signhash, designinfo.designHash, designinfo.designTag);
 		
 		resizeBatch('left',() => resizeBatch('right', () => makeThumb(()=>{
 			callback(`${RNFS.PlatformDependPath}/_thumb_/${signhash}_${designinfo.designHash}.scalb`);
@@ -164,7 +163,7 @@ export function resaveDesign(designinfo, callback) {
 		HairpinDB.updateDesign(	signhash, designinfo.designHash,
 								designinfo.designTitle, designinfo.designRecipe, designinfo.designComment);
 		HairpinDB.insertTag( signhash, designinfo.designHash,
-			designinfo.designTag.reduce(function(a,b){if(a.indexOf(b)<0)a.push(b);return a;},[]));
+			designinfo.designTag);
 
 		resizeBatch('left',() => resizeBatch('right', () => makeThumb(()=>{
 			callback(`${RNFS.PlatformDependPath}/_thumb_/${signhash}_${designinfo.designHash}.scalb`);

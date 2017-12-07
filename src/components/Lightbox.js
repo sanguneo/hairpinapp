@@ -39,18 +39,20 @@ export default class Lightbox extends Component {
 		if (this.props.close) this.props.close();
 	}
 	_open() {
-		setTimeout(() => this.setState({height}), 50);
-		Animated.timing(this.animatedValue, {
-			toValue: this.props.toValue,
-			duration: this.props.duration
-		}).start();
+		setTimeout(() => {
+			this.setState({height});
+			Animated.timing(this.animatedValue, {
+				toValue: this.props.toValue,
+				duration: this.props.duration
+			}).start();
+		}, 50);
+
 	}
 	_close() {
 		Animated.timing(this.animatedValue, {
 			toValue: this.props.fromValue,
 			duration: this.props.duration
-		}).start();
-		setTimeout(() => this.setState({height: 0}), this.props.duration + 50);
+		}).start(() => this.setState({height: 0}));
 	}
 
 	componentWillMount() {

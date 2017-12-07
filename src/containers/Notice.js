@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, ScrollView, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import * as noticeActions from '../redux/action/notice';
 import Lightbox from '../components/Lightbox';
 import Loading from '../components/Loading';
 import axios from 'axios';
@@ -29,47 +30,22 @@ class Notice extends Component {
 	}
 
 	fetchNoticeList() {
-		axios.get(
-			'http://hpserver.sanguneo.com/notice/plain',
-			{
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json'
-				}
-			}
-		).then(response => {
-			if (response.data.code === 320){
-				this.setState({noticeList: response.data.notice},()=> {
-					this.loadR.hide();
-				});
-			} else {
-			}
-		}).catch(e => {
-			console.log('error', e);
-		});
+		// this.loadR.show();
+		this.props.dispatch(noticeActions.getNotice((data)=>
+			this.setState({noticeList: data},()=> {
+				this.loadR.hide();
+			})
+		))
 	}
 
 	fetchOneNotice(id) {
 		this.loadR.show();
-		axios.get(
-			`http://hpserver.sanguneo.com/notice/${id}`,
-			{
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json'
-				}
-			}
-		).then(response => {
-			if (response.data.code === 340){
-				this.setState({noticeItem: response.data.notice}, ()=> {
-					this.loadR.hide();
-					this.openLightbox();
-				});
-			} else {
-			}
-		}).catch(e => {
-			console.log('error', e);
-		});
+		this.props.dispatch(noticeActions.getOneNotice(id, (data)=>
+			this.setState({noticeItem: data}, ()=> {
+				this.loadR.hide();
+				this.openLightbox();
+			})
+		));
 	}
 
 	openLightbox() {
@@ -78,8 +54,6 @@ class Notice extends Component {
 
 	componentWillMount() {
 		this.fetchNoticeList()
-	}
-	componentDidMount() {
 	}
 
 	render() {
@@ -101,7 +75,7 @@ class Notice extends Component {
 						<TouchableOpacity key={'icon'} style={[styles.closeBtn]} onPress={() => { this.noticeOne._close(); }}>
 							<Image source={close} style={[styles.close, {tintColor: this.props.color}]} />
 						</TouchableOpacity>
-						<Text style={[styles.noticeItemTitle, {height: 50}]}>{this.state.noticeItem.title}</Text>
+						<Text style={[styles.noticeItemTitle, {marginRight: 30,height: 50}]} ellipsizeMode='tail'>{this.state.noticeItem.title}</Text>
 						<Text style={[styles.noticeItemRegdate, {height: 20}]}>{Formatter.isoFormatter(this.state.noticeItem.regDate)}</Text>
 						<Text style={{paddingTop: 10, paddingBottom: 5, fontSize: 16}}>
 							{this.state.noticeItem.content && this.state.noticeItem.content.replace(/\\n/g, '\n')}
@@ -118,6 +92,11 @@ const styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
 	},
+	container: {
+		margin: 5,
+		borderWidth: 1,
+		borderColor: '#ddd',
+	},
 	closeBtn: {
 		position: 'absolute',
 		top: 5,
@@ -126,16 +105,16 @@ const styles = StyleSheet.create({
 
 	},
 	close: {
-		width: 30,
-		height: 30,
+		width: 25,
+		height: 25,
 		margin: 5,
 		tintColor: 'black'
 	},
 	noticeItemView: {
 		flex: 1,
 		padding: 10,
-		borderBottomWidth: 0.5,
-		borderBottomColor: '#999',
+		borderBottomWidth: 1,
+		borderBottomColor: '#bbb',
 	},
 	noticeItemTitle: {
 		flex: 1,

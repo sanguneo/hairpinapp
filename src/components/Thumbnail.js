@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
-import Formatter from '../utils/Formatter';
 
 export default class Thumbnail extends Component {
 	static propTypes = {
