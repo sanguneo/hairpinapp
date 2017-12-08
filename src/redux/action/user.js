@@ -19,7 +19,7 @@ export function logout() {
 	return {type: types.LOGGEDOUT};
 }
 
-export function login(userinfo, callback=(()=>{})) {
+export function login(userinfo, callback=(()=>{}), errorcallback=(()=>{})) {
 	return async (dispatch) => {
 		axios.post(
 			`https://${hairpinserver}/user/login`,
@@ -39,14 +39,14 @@ export function login(userinfo, callback=(()=>{})) {
 						_id: response.data._id,
 						email: response.data.email,
 						signhash: response.data.signhash,
-						name: response.data.nickname,
-						recipesize: response.data.designsize,
-						followersize: response.data.followersize,
-						followingsize: response.data.followingsize
+						name: response.data.nickname
 					}));
-					callback();
+					dispatch(update({
+						designsize: response.data.designsize,
+						followersize: response.data.followersize,
+						followingsize: response.data.followingsize,
+					}));
 				}
-
 				RNFS.exists(pPath).then((res) => {
 					if (res) {
 						loginOK();
@@ -54,22 +54,16 @@ export function login(userinfo, callback=(()=>{})) {
 						RNFS.downloadFile({
 							fromUrl: `http://${hairpinserver}/upload/profiles/${response.data.signhash}`,
 							toFile: pPath
-						}).promise.then((res) => loginOK()
-						).catch(e => {
-							console.error('error', e);
-						});
+						}).promise.then((res) => {loginOK();callback();}
+						).catch(e => {console.log('error', e);errorcallback();});
 					}
-				}).catch((err) => {
-					console.error(err);
-				});
+				}).catch((e) => {console.log('error', e);errorcallback();});
 			} else if (response.data.message === 'noaccount')  {
 				Alert.alert('사용자 정보가 존재하지 않습니다.')
 			} else if (response.data.message === 'invalidpw')  {
 				Alert.alert('패스워드를 다시 확인해주세요.');
 			}
-		}).catch(e => {
-			console.log('error', e);
-		});
+		}).catch(e => {console.log('error', e);errorcallback();});
 	};
 }
 
@@ -77,23 +71,23 @@ export function update(userstat) {
 	return {type: types.USERUPDATE, userstat};
 }
 
-export function updateAsync(precallback) {
+export function updateAsync() {
 	return async (dispatch, getState) => {
-		const usertoken = await getState().user.token;
+		const {token} = getState().user;
+		if(token === '') return;
 		axios.get(
 			'http://hpserver.sanguneo.com/user/userstat',
 			{
 				headers: {
 					Accept: 'application/json',
 					'Content-Type': 'application/json',
-					nekotnipriah: await usertoken
+					nekotnipriah: token
 				}
 			}
 		).then((response) => {
-			precallback();
 			if (response.data.message === 'success') {
 				const resUserstat = {
-					recipesize: response.data.designsize,
+					designsize: response.data.designsize,
 					followersize: response.data.followersize,
 					followingsize: response.data.followingsize,
 				};
@@ -106,7 +100,7 @@ export function updateAsync(precallback) {
 }
 
 
-export function joinAsync(userinfo, callback) {
+export function joinAsync(userinfo, callback=(()=>{}), errorcallback=(()=>{})) {
 	return async (dispatch) => {
 		let formdata = new FormData();
 		formdata.append('profile', {
@@ -133,20 +127,18 @@ export function joinAsync(userinfo, callback) {
 					RNFS.PlatformDependPath + '/_profiles_/' + response.data.signhash + '.scalb'
 				).then(() => {
 					Alert.alert('회원가입이 완료되었습니다',null, [{text: '확인', onPress: () => {callback()}}]);
-				}).catch(e => console.error('error', e));
+				}).catch(e => {console.log('error', e);errorcallback();});
 			} else if (response.data.message == 'emailexist') {
 				Alert.alert('사용중인 이메일 입니다');
 			} else {
-				Alert.alert('입력값을 다시 확인하세요!');
+				Alert.alert('입력값을 확인하세요!');
 			}
-		}).catch(e => {
-			console.log('error', e);
-		});
+		}).catch(e => {console.log('error', e);errorcallback();});
 	};
 }
 
-export function modifyAsync(userinfo, callback) {
-	return async (dispatch) => {
+export function modifyAsync(userinfo, callback=(()=>{}), errorcallback=(()=>{})) {
+	return async (dispatch, getState) => {
 		let formdata = new FormData();
 		formdata.append('profile', {
 			uri: userinfo.modifyProfile.uri,
@@ -167,20 +159,22 @@ export function modifyAsync(userinfo, callback) {
 			}
 		).then((response) => {
 			if (response.data.message === 'success') {
-				RNFS.copyFile(
-					userinfo.modifyProfile.uri.replace('file://', ''),
-					RNFS.PlatformDependPath + '/_profiles_/' + response.data.signhash + '.scalb'
-				).then(() => {
-					RNFS.unlink( userinfo.modifyProfile.uri.replace('file://', '') ).catch(e => {});
-					dispatch(loginDone({ name: response.data.nickname, refresh: Math.random() * 10000}));
-					Alert.alert('회원정보 수정이 완료되었습니다',null,
-						[{text: '확인', onPress: () => {callback()}}]);
-				}).catch(e => console.error('error', e));
+				if(userinfo.modifyProfile.uri.replace('file://', '').split('?')[0] !== RNFS.PlatformDependPath + '/_profiles_/' + response.data.signhash + '.scalb') {
+					RNFS.copyFile(
+						userinfo.modifyProfile.uri.replace('file://', ''),
+						RNFS.PlatformDependPath + '/_profiles_/' + response.data.signhash + '.scalb'
+					).then(() => {
+						RNFS.unlink(userinfo.modifyProfile.uri.replace('file://', '')).catch(e => errorcallback());
+					}).catch(e => {
+						console.log('error', e);
+						errorcallback();
+					});
+				}
+				dispatch(loginDone(Object.assign({}, getState().user, { name: userinfo.modifyNickname, refresh: Math.random() * 10000})));
+				Alert.alert('회원정보 수정이 완료되었습니다',null, [{text: '확인', onPress: () => {callback()}}]);
 			} else {
 				Alert.alert('입력값을 확인해주세요!');
 			}
-		}).catch(e => {
-			console.log('error', e);
-		});
+		}).catch(e => {console.log('error', e);errorcallback();});
 	};
 }

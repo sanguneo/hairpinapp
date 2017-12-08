@@ -113,7 +113,7 @@ class Reveal extends Component {
 										 value={this.props.designs.revealedDesign.designTag}/>
 					</FormWrapper>
 					<View style={styles.btns}>{this.props.designs.revealedDesign.designRecipe ?
-						<Button label="레시피" onPress={()=> this.openLightbox('recipe')}
+						<Button label="레시피" onPress={()=> this.openLightbox('design')}
 								buttonColor="#ff412b" source={recipe} style={{flex: 1, marginLeft: 10, marginRight: 5}}/>
 						: null}{this.props.designs.revealedDesign.designComment ?
 						<Button label="코멘트" onPress={()=> this.openLightbox('comment')}
@@ -126,7 +126,7 @@ class Reveal extends Component {
 								buttonColor="#60BF30" source={uploadIcon} style={{width: 40, marginLeft: 5, marginRight: 10}}/>
 					</View>
 				</ScrollView>
-				<Lightbox title={'레시피'} ref={ref => this.recipe = ref}>
+				<Lightbox title={'레시피'} ref={ref => this.design = ref}>
 					<View style={{ paddingHorizontal: 10, paddingBottom: 10 }}>
 						<Text style={{paddingTop: 10, paddingBottom: 5, fontSize: 16}}>
 							{this.props.designs.revealedDesign.designRecipe === '' ? '레시피없음' : this.props.designs.revealedDesign.designRecipe}

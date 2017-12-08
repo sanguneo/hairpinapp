@@ -1,4 +1,4 @@
-package com.sanguneo.hairpin;
+package com.calbum;
 
 import com.facebook.react.ReactActivity;
 

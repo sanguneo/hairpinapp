@@ -1,4 +1,4 @@
-package com.sanguneo.hairpin;
+package com.calbum;
 
 import android.app.Application;
 import android.util.Log;

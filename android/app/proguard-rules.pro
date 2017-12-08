@@ -64,3 +64,8 @@
 -dontwarn java.nio.file.*
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 -dontwarn okio.**
+
+-dontwarn org.apache.http.**
+-dontwarn android.text.StaticLayout
+-dontwarn android.net.http.AndroidHttpClient
+-dontwarn com.google.android.gms.**

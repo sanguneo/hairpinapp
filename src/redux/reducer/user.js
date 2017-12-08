@@ -9,7 +9,7 @@ const initialState = Immutable({
 	email: '',
 	signhash: '',
 	name: '',
-	recipesize: 0,
+	designsize: 0,
 	followersize: 0,
 	followingsize: 0
 });
@@ -31,7 +31,7 @@ export default function user(state = initialState, action = {}) {
 				email: '',
 				signhash: '',
 				name: '',
-				recipesize: 0,
+				designsize: 0,
 				followersize: 0,
 				followingsize: 0
 			});

@@ -121,7 +121,7 @@ export function saveDesign(designinfo, callback) {
 				photohash: designinfo.designHash,
 				reg_date: designinfo.designRegdate,
 				title: designinfo.designTitle,
-				recipe: designinfo.designRecipe,
+				design: designinfo.designRecipe,
 				comment: designinfo.designComment,
 				uploaded: 0
 			}));

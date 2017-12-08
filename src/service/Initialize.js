@@ -1,8 +1,14 @@
 'use strict';
+// const RNFS = require('./RNFS_wrapper');
 import RNFS from './RNFS_wrapper';
 
-import {AsyncStorage} from 'react-native';
+import {AsyncStorage, PermissionsAndroid, Alert, Platform} from 'react-native';
 import * as userActions from '../redux/action/user';
+
+async function requestPermission() {
+	try {await PermissionsAndroid.request( PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);}
+	catch (err) { console.warn(err)}
+}
 
 module.exports = (Store, callback) => {
 	// Make Initial Directory
@@ -26,6 +32,7 @@ module.exports = (Store, callback) => {
 
 	// Get user status from AsyncStorage then fetch to user props
 	AsyncStorage.getItem('user').then((user) => {
+		requestPermission();
 		Store.dispatch(userActions.loginDone(JSON.parse(user)));
 		callback();
 	});

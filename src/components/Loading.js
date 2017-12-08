@@ -8,7 +8,7 @@ const {width, height} = Dimensions.get('window');
 import Spinner from '../service/Spinner';
 
 export default class Loading extends Component {
-	state = { show: true, progress: null }
+	state = { show: this.props.show|| false, progress: null }
 	updateProg = (progress) => this.setState({progress});
 	show(){
 		this.animatedValue.setValue(1);

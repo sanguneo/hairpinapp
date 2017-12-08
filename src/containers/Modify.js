@@ -11,6 +11,7 @@ import FormWrapper from '../components/FormWrapper';
 import LabeledInput from '../components/LabeledInput';
 import Button from '../components/Button';
 import Hr from '../components/Hr';
+import Loading from '../components/Loading';
 
 class Modify extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -77,11 +78,12 @@ class Modify extends Component {
 		return true;
 	}
 	submit() {
-
 		if (!this.formCheck()) return;
+		this.loadR.show();
 		this.props.dispatch(userActions.modifyAsync(this.state, () => {
+			this.loadR.hide();
 			this.props.navigation.goBack(null);
-		}));
+		}, (p)=> this.loadR.updateProg(p), ()=> {console.log('hide');this.loadR.hide();}));
 	}
 
 	render() {
@@ -114,9 +116,10 @@ class Modify extends Component {
 									  onChange={(e) => this.handleInputChange('modifyPasswordChk', e)} />
 					</FormWrapper>
 					<View style={styles.btns}>
-						<Button label="수정완료" onPress={()=> {this.submit()}} buttonColor="#3692d9"/>
+						<Button label="수정완료" onPress={()=> {this.submit()}} buttonColor="#3692d9" style={{width: 300}}/>
 					</View>
 				</ScrollView>
+				<Loading  ref={ref => this.loadR = ref}/>
 			</View>
 		);
 	}
@@ -129,18 +132,18 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 	},
-	img: {
-		width: 300,
-		height: 300,
-		borderColor: '#eee',
-		borderWidth: 1
-	},
 	imgView: {
 		flex: 1,
-		flexDirection: 'column',
-		height: 300,
-		alignItems: 'center',
+		flexDirection: 'row',
+		height: 200,
+		justifyContent: 'center',
 		marginVertical: 20,
+	},
+	img: {
+		width: 200,
+		height: 200,
+		borderColor: '#eee',
+		borderWidth: 1
 	},
 	btns: {
 		flex: 1,

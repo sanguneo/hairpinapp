@@ -82,7 +82,7 @@ class Notice extends Component {
 						</Text>
 					</ScrollView>
 				</Lightbox>
-				<Loading  ref={ref => this.loadR = ref}/>
+				<Loading  ref={ref => this.loadR = ref} show={true}/>
 			</View>
 		);
 	}

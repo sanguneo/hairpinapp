@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, ScrollView, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import RNFS from '../service/RNFS_wrapper';
 
 import {connect} from 'react-redux';
 import * as userActions from '../redux/action/user';
+import * as designActions from '../redux/action/designs';
 
 import FormWrapper from '../components/FormWrapper';
 import LabeledInput from '../components/LabeledInput';
 import Button from '../components/Button';
 import Hr from '../components/Hr';
+import Loading from '../components/Loading';
 
 import profile from '../assets/img/profile.png';
 
@@ -36,12 +38,15 @@ class Login extends Component {
 
 
 	login() {
+		this.loadR.show();
 		this.props.dispatch(userActions.login({
 			email: this.state.loginEmail,
 			password: this.state.loginPassword
 		}, () => {
+			this.props.dispatch(designActions.getDesignsAsync());
+			this.loadR.hide();
 			setTimeout(()=> this.props.navigation.goBack(null), 500);
-		}))
+		}), (p)=> this.loadR.updateProg(p))
 	}
 
 	logout() {
@@ -51,6 +56,9 @@ class Login extends Component {
 		},()=> {
 			this.props.dispatch(userActions.logout());
 		});
+	}
+	componentWillMount(){
+		this.props.dispatch(userActions.updateAsync());
 	}
 
 	render() {
@@ -62,6 +70,11 @@ class Login extends Component {
 				<ScrollView style={styles.container} keyboardShouldPersistTaps='handled'>
 					<View style={styles.imgView}>
 						<Image source={profileImage} style={styles.img} />
+					</View>
+					<View style={styles.indicatorView}>
+						<View style={styles.indicator}><Text style={styles.indiNum}>{this.props.user.designsize}</Text><Text style={styles.indiLabel}>designs</Text></View>
+						<View style={styles.indicator}><Text style={styles.indiNum}>{this.props.user.followersize}</Text><Text style={styles.indiLabel}>follower</Text></View>
+						<View style={styles.indicator}><Text style={styles.indiNum}>{this.props.user.followingsize}</Text><Text style={styles.indiLabel}>following</Text></View>
 					</View>
 					<FormWrapper>
 						{loggedin ?
@@ -106,6 +119,7 @@ class Login extends Component {
 						]
 					}
 				</ScrollView>
+				<Loading  ref={ref => this.loadR = ref}/>
 			</View>
 		);
 	}
@@ -118,18 +132,48 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 	},
+	imgView: {
+		flex: 1,
+		flexDirection: 'row',
+		height: 200,
+		justifyContent: 'center',
+		marginVertical: 20,
+	},
 	img: {
-		width: 300,
-		height: 300,
+		width: 200,
+		height: 200,
 		borderColor: '#eee',
 		borderWidth: 1
 	},
-	imgView: {
+	indicatorView: {
 		flex: 1,
+		flexDirection: 'row',
+		height: 50,
+		justifyContent: 'center',
+		marginTop: 0,
+		marginBottom: 20,
+	},
+	indicator: {
 		flexDirection: 'column',
-		height: 300,
-		alignItems: 'center',
-		marginVertical: 20,
+		width: 100,
+		height: 50,
+	},
+	indiNum: {
+		flex: 1,
+		textAlign: 'center',
+		textAlignVertical: 'center',
+		fontSize: 20,
+		fontWeight: 'bold',
+		fontFamily: 'Verdana',
+		color: 'black'
+	},
+	indiLabel: {
+		flex: 1,
+		textAlign: 'center',
+		textAlignVertical: 'center',
+		fontSize: 13,
+		fontFamily: 'Verdana',
+		color: 'black'
 	},
 	btns: {
 		flex: 1,

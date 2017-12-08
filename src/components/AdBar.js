@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
 	barBox: {
 		height: 50,
 		flexDirection: 'row',
-		justifyContent: 'center',
-		marginRight: -0.5
+		justifyContent: 'center'
 	}
 });
