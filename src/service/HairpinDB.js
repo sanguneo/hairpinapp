@@ -83,6 +83,12 @@ class HairpinDBClass {
 		this.executeQuery(query);
 	}
 
+	uploadDesign(signhash, photohash, uploaded) {
+		const query = "UPDATE `ca_photo` SET `uploaded` = '" + uploaded + "'" +
+			"  WHERE `photohash` = '"+photohash+"' AND `signhash` = '"+signhash+"'";
+		this.executeQuery(query);
+	}
+
 	deleteDesign(signhash, photohash) {
 		const query  = "DELETE FROM `ca_photo` WHERE `photohash` = '"+photohash+"' AND `signhash` = '"+signhash+"'";
 		const tagquery = "DELETE FROM `ca_tag` WHERE `photohash` = '"+photohash+"' AND `signhash` = '"+signhash+"'";

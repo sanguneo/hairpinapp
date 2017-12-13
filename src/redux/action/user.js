@@ -6,6 +6,8 @@ import RNFS from '../../service/RNFS_wrapper';
 import * as types from '../actionType/user';
 import {hairpinserver} from '../../config/env.json';
 
+const profilePath = `${RNFS.PlatformDependPath}/_profiles_/`;
+
 export function refresh(refreshkey=Date.now()){
 	return {type: types.REFRESH, refresh: refreshkey};
 }
@@ -32,7 +34,7 @@ export function login(userinfo, callback=(()=>{}), errorcallback=(()=>{})) {
 			}
 		).then((response) => {
 			if (response.data.message === 'success') {
-				let pPath = RNFS.PlatformDependPath + '/_profiles_/' + response.data.signhash + '.scalb';
+				let pPath = `${profilePath}${response.data.signhash}.scalb`;
 				const loginOK = () => {
 					dispatch(loginDone({
 						token: response.data.token,
@@ -124,7 +126,7 @@ export function joinAsync(userinfo, callback=(()=>{}), errorcallback=(()=>{})) {
 			if (response.data.message === 'success') {
 				RNFS.copyFile(
 					userinfo.joinProfile.uri.replace('file://', ''),
-					RNFS.PlatformDependPath + '/_profiles_/' + response.data.signhash + '.scalb'
+					`${profilePath}${response.data.signhash}.scalb`
 				).then(() => {
 					Alert.alert('회원가입이 완료되었습니다',null, [{text: '확인', onPress: () => {callback()}}]);
 				}).catch(e => {console.log('error', e);errorcallback();});
@@ -159,10 +161,10 @@ export function modifyAsync(userinfo, callback=(()=>{}), errorcallback=(()=>{}))
 			}
 		).then((response) => {
 			if (response.data.message === 'success') {
-				if(userinfo.modifyProfile.uri.replace('file://', '').split('?')[0] !== RNFS.PlatformDependPath + '/_profiles_/' + response.data.signhash + '.scalb') {
+				if(userinfo.modifyProfile.uri.replace('file://', '').split('?')[0] !== `${profilePath}${response.data.signhash}.scalb`) {
 					RNFS.copyFile(
 						userinfo.modifyProfile.uri.replace('file://', ''),
-						RNFS.PlatformDependPath + '/_profiles_/' + response.data.signhash + '.scalb'
+						`${profilePath}${response.data.signhash}.scalb`
 					).then(() => {
 						RNFS.unlink(userinfo.modifyProfile.uri.replace('file://', '')).catch(e => errorcallback());
 					}).catch(e => {

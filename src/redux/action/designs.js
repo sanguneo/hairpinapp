@@ -205,10 +205,53 @@ export function deleteDesign(callback=(()=>{})) {
 	}
 }
 
-export function uploadDesign(type=0,callback=(()=>{})) {
+export function uploadDesign(uploadedType=1, errorcallback=(()=>{})) {
 	return async (dispatch, getState) => {
-		const {signhash} = getState().user;
-		const {designHash} = getState().designs.revealedDesign;
+		const {token, signhash} = getState().user;
+		const {
+			designHash,
+			designRegdate,
+			designLeftImageSrc,
+			designRightImageSrc,
+			designTitle,
+			designTag,
+			designRecipe,
+			designComment,
+			designUploaded
+		} = getState().designs.revealedDesign;
+
+		let formdata = new FormData();
+		const appendTo = (formdata, uri, name, part) => formdata.append('designimage', { uri: uri.split('?')[0], name: `${name}_${part}.scalb`, type: 'image/jpeg'});
+		appendTo(formdata, designLeftImageSrc.uri, `${signhash}_${designHash}`,`SRC_LEFT`);
+		appendTo(formdata, designRightImageSrc.uri, `${signhash}_${designHash}`,`SRC_RIGHT`);
+		appendTo(formdata, `file://${originalDirPath}${signhash}_${designHash}.scalb`, `${signhash}_${designHash}`,`ORG`);
+		appendTo(formdata, `file://${RNFS.PlatformDependPath}/_thumb_/${signhash}_${designHash}.scalb`, `${signhash}_${designHash}`,`THUMB`);
+
+		formdata.append('designHash', designHash);
+		formdata.append('designRegdate', designRegdate);
+		formdata.append('designTitle', designTitle);
+		formdata.append('designTag', JSON.stringify(designTag));
+		formdata.append('designRecipe', designRecipe);
+		formdata.append('designComment', designComment);
+		formdata.append('uploadedType', uploadedType);
+
+		axios.post(
+			`https://${hairpinserver}/design/upload`,
+			formdata,
+			{
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'multipart/form-data',
+					nekotnipriah: token
+				}
+			}
+		).then((response) => {
+			console.log(response.data);
+			if (response.data.message === 'success') {
+				HairpinDB.uploadDesign(	signhash, designHash, uploadedType);
+			} else {
+			}
+		}).catch(e => {console.log('error', e);errorcallback();});
 	}
 }
 

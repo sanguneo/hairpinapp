@@ -32,7 +32,7 @@ module.exports = (Store, callback) => {
 
 	// Get user status from AsyncStorage then fetch to user props
 	AsyncStorage.getItem('user').then((user) => {
-		requestPermission();
+		(Platform.OS === 'android') && requestPermission();
 		Store.dispatch(userActions.loginDone(JSON.parse(user)));
 		callback();
 	});

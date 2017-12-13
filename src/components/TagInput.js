@@ -300,7 +300,7 @@ class TagInput extends Component {
 									{...inputProps}
 								/>
 							</View> : ((value.length ===0) ? <TextInput value={text}
-								style={[styles.textInputNone, {color: inputColor}]} {...inputProps} /> : null)
+								style={[styles.textInputNone, {color: inputColor}]} readOnly={true} editable={false} {...inputProps} /> : null)
 							}
 						</View>
 					</View>

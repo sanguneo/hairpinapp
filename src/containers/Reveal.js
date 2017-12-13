@@ -20,7 +20,7 @@ import follower from '../assets/img/icon/follower.png';
 import privates from '../assets/img/icon/private.png';
 import upload from '../assets/img/icon/upload.png';
 
-const uploadIcons = [upload, privates, null, follower, null, null, earth];
+const uploadIcons = [upload, privates, null, follower, null, null, null, earth];
 
 class Reveal extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -80,6 +80,11 @@ class Reveal extends Component {
 							{text: '팔로잉', onPress:()=>this.props.dispatch(designActions.uploadDesign((3)))},
 							{text: '전체공개', onPress:()=>this.props.dispatch(designActions.uploadDesign((7)))}]))
 				}, {text: '취소'}]);
+		else
+			Alert.alert('업로드 공개유형을 선택하세요','디자인을 게시하고 공유하세요!\n취소하려면 창 바깥쪽을 터치하세요.',
+			[	{text: '비공개', onPress:()=>this.props.dispatch(designActions.uploadDesign((1)))},
+				{text: '팔로잉', onPress:()=>this.props.dispatch(designActions.uploadDesign((3)))},
+				{text: '전체공개', onPress:()=>this.props.dispatch(designActions.uploadDesign((7)))}])
 	}
 
 	openLightbox(referenceCase) {
