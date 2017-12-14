@@ -9,6 +9,7 @@ import LabeledInput from '../components/LabeledInput';
 import LabeledTagInput from '../components/LabeledTagInput';
 import Button from '../components/Button';
 import Lightbox from '../components/Lightbox';
+import Loading from '../components/Loading';
 import Hr from '../components/Hr';
 
 import recipe from '../assets/img/icon/recipe.png';
@@ -72,19 +73,17 @@ class Reveal extends Component {
 	}
 
 	upload() {
-		if(this.props.designs.revealedDesign.designUploaded !== 0)
-			Alert.alert('이미 게시 되어있습니다','공개유형을 변경하시겠습니까?', [
-				{text: '확인', onPress:()=> (
-					Alert.alert('업로드 공개유형을 선택하세요','디자인을 게시하고 공유하세요!\n취소하려면 창 바깥쪽을 터치하세요.',
-						[	{text: '비공개', onPress:()=>this.props.dispatch(designActions.uploadDesign((1)))},
-							{text: '팔로잉', onPress:()=>this.props.dispatch(designActions.uploadDesign((3)))},
-							{text: '전체공개', onPress:()=>this.props.dispatch(designActions.uploadDesign((7)))}]))
-				}, {text: '취소'}]);
-		else
-			Alert.alert('업로드 공개유형을 선택하세요','디자인을 게시하고 공유하세요!\n취소하려면 창 바깥쪽을 터치하세요.',
-			[	{text: '비공개', onPress:()=>this.props.dispatch(designActions.uploadDesign((1)))},
-				{text: '팔로잉', onPress:()=>this.props.dispatch(designActions.uploadDesign((3)))},
-				{text: '전체공개', onPress:()=>this.props.dispatch(designActions.uploadDesign((7)))}])
+		const fDispatchUploadDesign = (type)=> {
+			this.loadR.show(); this.props.dispatch(designActions.uploadDesign(type,() => this.loadR.hide(), (e) => this.loadR.updateProg(e)))
+		}
+		const alertShow = () => Alert.alert('업로드 공개유형을 선택하세요','디자인을 게시하고 공유하세요!\n취소하려면 창 바깥쪽을 터치하세요.',
+			[	{text: '비공개',    onPress:()=>{fDispatchUploadDesign(1);}},
+				{text: '팔로잉',    onPress:()=>{fDispatchUploadDesign(3);}},
+				{text: '전체공개',  onPress:()=>{fDispatchUploadDesign(7);}}]);
+
+		if (this.props.designs.revealedDesign.designUploaded !== 0)
+			Alert.alert('이미 게시 되어있습니다','공개유형을 변경하시겠습니까?', [ {text: '확인', onPress: alertShow}, {text: '취소'}]);
+		else alertShow();
 	}
 
 	openLightbox(referenceCase) {
@@ -119,10 +118,10 @@ class Reveal extends Component {
 					</FormWrapper>
 					<View style={styles.btns}>{this.props.designs.revealedDesign.designRecipe ?
 						<Button label="레시피" onPress={()=> this.openLightbox('design')}
-								buttonColor="#ff412b" source={recipe} style={{flex: 1, marginLeft: 10, marginRight: 5}}/>
+								buttonColor="#ff412b" source={recipe} style={{flex: 1, marginLeft: 10, marginRight: this.props.designs.revealedDesign.designComment ? 5 : 10}}/>
 						: null}{this.props.designs.revealedDesign.designComment ?
 						<Button label="코멘트" onPress={()=> this.openLightbox('comment')}
-								buttonColor="#3692d9" source={comment} style={{flex: 1, marginLeft: 5, marginRight: 10}}/>: null}
+								buttonColor="#3692d9" source={comment} style={{flex: 1, marginLeft: this.props.designs.revealedDesign.designRecipe ? 5 : 10, marginRight: 10}}/>: null}
 					</View>
 					<View style={[styles.btns, {marginBottom: 20}]}>
 						<Button label="수정하기" onPress={()=> this.edit()}
@@ -131,6 +130,7 @@ class Reveal extends Component {
 								buttonColor="#60BF30" source={uploadIcon} style={{width: 40, marginLeft: 5, marginRight: 10}}/>
 					</View>
 				</ScrollView>
+				<Loading  ref={ref => this.loadR = ref}/>
 				<Lightbox title={'레시피'} ref={ref => this.design = ref}>
 					<View style={{ paddingHorizontal: 10, paddingBottom: 10 }}>
 						<Text style={{paddingTop: 10, paddingBottom: 5, fontSize: 16}}>
@@ -170,9 +170,7 @@ const styles = StyleSheet.create({
 	},
 	img: {
 		width: 200,
-		height: 400,
-		borderColor: '#eee',
-		borderWidth: 1
+		height: 400
 	},
 	imgView: {
 		flex: 1,

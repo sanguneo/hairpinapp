@@ -205,7 +205,7 @@ export function deleteDesign(callback=(()=>{})) {
 	}
 }
 
-export function uploadDesign(uploadedType=1, errorcallback=(()=>{})) {
+export function uploadDesign(uploadedType=1, done=(()=>{}), progress=(()=>{})) {
 	return async (dispatch, getState) => {
 		const {token, signhash} = getState().user;
 		const {
@@ -243,15 +243,20 @@ export function uploadDesign(uploadedType=1, errorcallback=(()=>{})) {
 					Accept: 'application/json',
 					'Content-Type': 'multipart/form-data',
 					nekotnipriah: token
+				},
+				onUploadProgress: (progressEvent) => {
+					const totalLength = progressEvent.lengthComputable ? progressEvent.total : progressEvent.target.getResponseHeader('content-length') || progressEvent.target.getResponseHeader('x-decompressed-content-length');
+					totalLength && progress(`${progressEvent.loaded} / ${totalLength} (${Math.round(progressEvent.loaded*100 /totalLength)}%)`);
 				}
 			}
 		).then((response) => {
-			console.log(response.data);
 			if (response.data.message === 'success') {
 				HairpinDB.uploadDesign(	signhash, designHash, uploadedType);
+				dispatch(setPhoto({designUploaded: uploadedType}));
 			} else {
 			}
-		}).catch(e => {console.log('error', e);errorcallback();});
+			done();
+		}).catch(e => {console.log('error', e);done();});
 	}
 }
 

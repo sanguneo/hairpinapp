@@ -71,7 +71,10 @@ class HairpinDBClass {
 		const query = `SELECT * FROM ca_photo WHERE signhash='${signhash}'AND photohash='${designHash}';`;
 		const tagquery = `SELECT * FROM ca_tag WHERE signhash='${signhash}'AND photohash='${designHash}';`;
 		this.executeQuery(query, (results) => {
+			const row = results.rows.raw()[0]
 			this.executeQuery(tagquery, (tagresults) => {
+				row.recipe = row.recipe.replace(/\\n/g,'\n');
+				row.comment = row.comment.replace(/\\n/g,'\n');
 				callback(results.rows.raw()[0], tagresults.rows.raw().map(tag=> tag.name));
 			});
 		});

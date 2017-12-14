@@ -187,8 +187,6 @@ const styles = StyleSheet.create({
 	img: {
 		width: 200,
 		height: 400,
-		borderColor: '#eee',
-		borderWidth: 1
 	},
 	imgView: {
 		flex: 1,
