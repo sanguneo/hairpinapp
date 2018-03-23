@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, ScrollView, Image, Text, StyleSheet } from 'react-native';
 import RNFS from '../service/RNFS_wrapper';
 
 import {connect} from 'react-redux';

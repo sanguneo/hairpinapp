@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { KeyboardAvoidingView, View, Text, TextInput, StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, View, Text, StyleSheet } from 'react-native';
 import TagInput from './TagInput'
 
 class LabeledTagInput extends Component {

@@ -1,10 +1,10 @@
 import axios from 'axios';
-import {Alert} from 'react-native';
+import {hairpinserver} from '../../config/env.json';
 
 export function getNotice(callback, errorCallback=(()=>{})) {
 	return async () => {
 		axios.get(
-			'http://hpserver.sanguneo.com/notice/plain',
+			`https://${hairpinserver}/notice/plain`,
 			{
 				headers: {
 					Accept: 'application/json',
@@ -26,7 +26,7 @@ export function getNotice(callback, errorCallback=(()=>{})) {
 export function getOneNotice(id, callback, errorCallback=(()=>{})) {
 	return async () => {
 		axios.get(
-			`http://hpserver.sanguneo.com/notice/${id}`,
+			`https://${hairpinserver}/notice/${id}`,
 			{
 				headers: {
 					Accept: 'application/json',

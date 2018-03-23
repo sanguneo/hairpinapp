@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, Platform, View, FlatList, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { Dimensions, View, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import Thumbnail from '../components/Thumbnail';
 
 import {connect} from 'react-redux';

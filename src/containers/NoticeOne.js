@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet } from 'react-native';
 import axios from 'axios';
-import Formatter from '../utils/Formatter';
+import {hairpinserver} from '../../config/env.json';
 
 import {connect} from 'react-redux';
 
@@ -19,7 +19,7 @@ class NoticeOne extends Component {
 
 	fetchOneNotice(id) {
 		axios.get(
-			`http://hpserver.sanguneo.com/notice/${id}`,
+			`https://${hairpinserver}/notice/${id}`,
 			{
 				headers: {
 					Accept: 'application/json',

@@ -78,7 +78,7 @@ export function updateAsync() {
 		const {token} = getState().user;
 		if(token === '') return;
 		axios.get(
-			'http://hpserver.sanguneo.com/user/userstat',
+			`https://${hairpinserver}/user/userstat`,
 			{
 				headers: {
 					Accept: 'application/json',

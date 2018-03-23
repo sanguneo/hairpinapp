@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
-import RNFS from '../service/RNFS_wrapper';
 
 import {connect} from 'react-redux';
 import * as designActions from '../redux/action/designs';

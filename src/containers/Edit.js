@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, ScrollView, Text, Image, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { captureRef } from "react-native-view-shot";
-import Crypt from '../utils/Crypt';
 
 import {connect} from 'react-redux';
 import * as designActions from '../redux/action/designs';

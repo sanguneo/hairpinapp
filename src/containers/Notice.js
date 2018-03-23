@@ -3,7 +3,6 @@ import { View, ScrollView, Text, Image, TouchableOpacity, StyleSheet, Dimensions
 import * as noticeActions from '../redux/action/notice';
 import Lightbox from '../components/Lightbox';
 import Loading from '../components/Loading';
-import axios from 'axios';
 import Formatter from '../utils/Formatter';
 
 import {connect} from 'react-redux';
@@ -20,6 +19,11 @@ class Notice extends Component {
 			<View style={{width: 32, height: 32, marginHorizontal: 8}}/>
 		),
 	})
+
+	state = {
+		noticeList: [],
+		noticeItem: {}
+	}
 
 	constructor(props) {
 		super(props);

@@ -1,8 +1,7 @@
 'use strict';
-// const RNFS = require('./RNFS_wrapper');
 import RNFS from './RNFS_wrapper';
 
-import {AsyncStorage, PermissionsAndroid, Alert, Platform} from 'react-native';
+import {AsyncStorage, PermissionsAndroid,  Platform} from 'react-native';
 import * as userActions from '../redux/action/user';
 
 async function requestPermission() {

@@ -24,14 +24,14 @@ const {width, height, deviceWidth, deviceHeight, scale} = (function() {
 
 class TotalList extends Component {
 	static navigationOptions = ({ navigation }) => ({
-		headerTitleStyle :{alignSelf: 'center', color: '#fff', fontWeight: 'normal'},
+		headerTitleStyle :{alignSelf: 'center', color: '#fff', fontWeight: 'normal',textAlign: 'center', justifyContent: 'center'},
 		headerLeft: (navigation.state.routeName&& navigation.state.routeName === 'Main' &&
 			<TouchableOpacity onPress={() => {navigation.navigate('DrawerOpen')}}>
 				<Image source={menu} style={{width: 32, height: 32, marginHorizontal: 8, tintColor: '#fff'}}/>
 			</TouchableOpacity>
 		),
 		headerTitle: (navigation.state.routeName&& navigation.state.routeName === 'Main' ?
-			<Image source={logo} style={[{width: 123, height: 40}, Platform.OS === 'android' ? {alignSelf:'center'} : {}]}/> : '전체보기'
+			<Image source={logo} resizeMode="contain" style={[{width: 123, height: 40,flex: 1}, Platform.OS === 'android' ? {alignSelf:'center'} : {}]}/> : '전체보기'
 		),
 		headerRight: (
 			<View style={{width: 32, height: 32, marginHorizontal: 8}}/>

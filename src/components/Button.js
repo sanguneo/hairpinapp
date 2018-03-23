@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Platform, TouchableOpacity, TouchableHighlight, View, Text, Image,StyleSheet } from 'react-native';
+import { TouchableOpacity, TouchableHighlight, View, Text, Image,StyleSheet } from 'react-native';
 let TouchableWeUse = null;
 class Button extends Component {
 	static propTypes = {
