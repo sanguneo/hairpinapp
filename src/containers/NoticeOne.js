@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import axios from 'axios';
-import {hairpinserver} from '../../config/env.json';
+import {hairpinserver} from '../config/env.json';
 
 import {connect} from 'react-redux';
 
