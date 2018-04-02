@@ -26,6 +26,7 @@ class Login extends Component {
 
 	constructor(props) {
 		super(props);
+		console.log(1111);
 		this.state = {
 			loginEmail: null,
 			loginPassword: null,
@@ -46,7 +47,7 @@ class Login extends Component {
 			this.props.dispatch(designActions.getDesignsAsync());
 			this.loadR.hide();
 			setTimeout(()=> this.props.navigation.goBack(null), 500);
-		}), (p)=> this.loadR.updateProg(p))
+		}, () => {}), (p)=> this.loadR.updateProg(p))
 	}
 
 	logout() {

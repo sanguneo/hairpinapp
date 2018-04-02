@@ -52,6 +52,7 @@ export function login(userinfo, callback=(()=>{}), errorcallback=(()=>{})) {
 				RNFS.exists(pPath).then((res) => {
 					if (res) {
 						loginOK();
+						callback();
 					} else {
 						RNFS.downloadFile({
 							fromUrl: `http://${hairpinserver}/upload/profiles/${response.data.signhash}`,

@@ -135,7 +135,6 @@ const styles = StyleSheet.create({
 	imgView: {
 		flex: 1,
 		flexDirection: 'row',
-		width: 200,
 		height: 200,
 		justifyContent: 'center',
 		marginVertical: 20,
