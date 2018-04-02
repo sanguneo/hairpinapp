@@ -90,8 +90,8 @@ android {
         applicationId "com.calbum"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 13 // 180326
-        versionName "2.0.1"  // 180326
+        versionCode 15 // 180326
+        versionName "2.0.3"  // 180326
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -142,6 +142,7 @@ dependencies {
     compile project(':react-native-fs')
     compile project(':react-native-admob')
     compile project(':react-native-sqlite-storage')
+    compile project(':react-native-smart-splash-screen')
     compile project(':react-native-image-crop-picker')
     compile project(':react-native-image-resizer')
     compile project(':react-native-view-shot')
